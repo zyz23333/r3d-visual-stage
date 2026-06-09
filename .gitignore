@@ -1,0 +1,13 @@
+# environment
+.env
+tmp/
+
+# demo artifacts
+demo_artifacts/
+
+# references
+/references/
+
+# agent
+.codex/
+.claude/
