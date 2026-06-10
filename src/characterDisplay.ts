@@ -1,18 +1,18 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-import type { OverlayConfig } from './config';
+import type { CharacterDisplayConfig } from './config';
 import { logError, logInfo, logWarning } from './diagnostics';
-import { DomOverlay } from './domOverlay';
+import { DomLayer } from './domLayer';
 
-export class CharacterStage {
-  private readonly config: OverlayConfig;
+export class CharacterDisplay {
+  private readonly config: CharacterDisplayConfig;
   private readonly scene = new THREE.Scene();
   private readonly camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
   private readonly clock = new THREE.Clock();
   private readonly loader = new GLTFLoader();
   private readonly renderer: THREE.WebGLRenderer;
-  private readonly domOverlay: DomOverlay;
+  private readonly domLayer: DomLayer;
   private mixer?: THREE.AnimationMixer;
   private model?: THREE.Object3D;
   private clips = new Map<string, THREE.AnimationClip>();
@@ -23,7 +23,7 @@ export class CharacterStage {
   private hasLoggedFirstLayout = false;
   private hasLoggedFirstRender = false;
 
-  public constructor(config: OverlayConfig) {
+  public constructor(config: CharacterDisplayConfig) {
     this.config = config;
     this.renderer = new THREE.WebGLRenderer({
       alpha: true,
@@ -34,7 +34,7 @@ export class CharacterStage {
     this.renderer.setClearColor(0x000000, 0);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, this.config.maxPixelRatio));
 
-    this.domOverlay = new DomOverlay(this.renderer.domElement, config);
+    this.domLayer = new DomLayer(this.renderer.domElement, config);
     this.camera.position.set(0, 1.35, 4.5);
     this.camera.lookAt(0, 1.1, 0);
     this.installLights();
@@ -42,24 +42,24 @@ export class CharacterStage {
 
   public show(): void {
     this.isVisible = true;
-    this.domOverlay.show();
-    logInfo('Overlay shown.');
+    this.domLayer.show();
+    logInfo('Character display shown.');
 
     if (!this.hasLoadedDefault && this.config.defaultCharacterPath) {
       this.hasLoadedDefault = true;
-      void this.loadCharacter(this.config.defaultCharacterPath);
+      void this.load(this.config.defaultCharacterPath);
     }
   }
 
   public hide(): void {
     this.isVisible = false;
-    this.domOverlay.hide();
+    this.domLayer.hide();
   }
 
-  public async loadCharacter(path: string): Promise<void> {
+  public async load(path: string): Promise<void> {
     const trimmedPath = path.trim();
     if (!trimmedPath) {
-      logWarning('LoadCharacter ignored because the path was empty.');
+      logWarning('Character Load ignored because the path was empty.');
       return;
     }
 
@@ -132,10 +132,10 @@ export class CharacterStage {
     }
     this.lastRenderMs = nowMs;
 
-    const viewport = this.domOverlay.updateLayout();
+    const viewport = this.domLayer.updateLayout();
     if (!this.hasLoggedFirstLayout) {
       this.hasLoggedFirstLayout = true;
-      logInfo('Overlay layout ready.', this.domOverlay.diagnostics());
+      logInfo('Character display layout ready.', this.domLayer.diagnostics());
     }
 
     this.renderer.setSize(viewport.width, viewport.height, false);
@@ -148,7 +148,7 @@ export class CharacterStage {
 
     if (!this.hasLoggedFirstRender) {
       this.hasLoggedFirstRender = true;
-      logInfo('Overlay first render completed.', {
+      logInfo('Character display first render completed.', {
         hasModel: Boolean(this.model),
         hasMixer: Boolean(this.mixer),
         viewport,
@@ -159,7 +159,7 @@ export class CharacterStage {
   public dispose(): void {
     this.disposeCurrentModel();
     this.renderer.dispose();
-    this.domOverlay.dispose();
+    this.domLayer.dispose();
   }
 
   private installLights(): void {

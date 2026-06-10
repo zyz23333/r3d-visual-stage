@@ -6,10 +6,10 @@ import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 
 installNodeFileReader();
 
-const outputPath = resolve('public/models/r3d-demo-character.glb');
+const outputPath = resolve('public/models/r3d-validation-character.glb');
 
 const root = new THREE.Group();
-root.name = 'R3D_DemoCharacter';
+root.name = 'R3D_ValidationCharacter';
 
 const bodyMaterial = new THREE.MeshStandardMaterial({
   color: 0x5c8df6,
@@ -28,32 +28,32 @@ const darkMaterial = new THREE.MeshStandardMaterial({
 });
 
 const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.42, 1.1, 8, 20), bodyMaterial);
-body.name = 'R3D_DemoBody';
+body.name = 'R3D_ValidationBody';
 body.position.y = 1.15;
 root.add(body);
 
 const head = new THREE.Mesh(new THREE.SphereGeometry(0.34, 32, 16), accentMaterial);
-head.name = 'R3D_DemoHead';
+head.name = 'R3D_ValidationHead';
 head.position.y = 2.12;
 root.add(head);
 
 const visor = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.08, 0.04), darkMaterial);
-visor.name = 'R3D_DemoVisor';
+visor.name = 'R3D_ValidationVisor';
 visor.position.set(0, 2.16, 0.31);
 root.add(visor);
 
-const leftArm = createArm('R3D_DemoLeftArm', -0.52, bodyMaterial);
-const rightArm = createArm('R3D_DemoRightArm', 0.52, bodyMaterial);
+const leftArm = createArm('R3D_ValidationLeftArm', -0.52, bodyMaterial);
+const rightArm = createArm('R3D_ValidationRightArm', 0.52, bodyMaterial);
 root.add(leftArm, rightArm);
 
 const idleClip = new THREE.AnimationClip('Idle', 2, [
   new THREE.VectorKeyframeTrack(
-    'R3D_DemoCharacter.position',
+    'R3D_ValidationCharacter.position',
     [0, 1, 2],
     [0, 0, 0, 0, 0.06, 0, 0, 0, 0],
   ),
   new THREE.QuaternionKeyframeTrack(
-    'R3D_DemoCharacter.quaternion',
+    'R3D_ValidationCharacter.quaternion',
     [0, 1, 2],
     quaternionValues([0, 0, 0], [0, 0.08, 0], [0, 0, 0]),
   ),
@@ -61,7 +61,7 @@ const idleClip = new THREE.AnimationClip('Idle', 2, [
 
 const waveClip = new THREE.AnimationClip('Wave', 1.4, [
   new THREE.QuaternionKeyframeTrack(
-    'R3D_DemoRightArm.quaternion',
+    'R3D_ValidationRightArm.quaternion',
     [0, 0.28, 0.56, 0.84, 1.12, 1.4],
     quaternionValues(
       [0, 0, -0.35],

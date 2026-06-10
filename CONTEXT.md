@@ -4,9 +4,9 @@ RPG 3D defines the product language for **R3D Visual Stage**, a web-first RPG Ma
 
 ## Language
 
-**3D Character Overlay**:
-A 3D-rendered character layer shown alongside the RPG Maker MV 2D game view.
-_Avoid_: 3D map actor, 3D player character
+**3D Character Display**:
+A persistent 3D-rendered character presentation shown alongside the RPG Maker MV 2D game view, analogous to a character portrait or bust display.
+_Avoid_: 3D Character Overlay, 3D map actor, 3D player character
 
 **Presentation Scene**:
 A bounded 3D visual scene used for character display, camera work, animation staging, or short visual sequences.
@@ -16,12 +16,16 @@ _Avoid_: 3D world, gameplay map, full 3D level
 The bounded 3D presentation layer provided by **R3D Visual Stage** alongside RPG Maker MV's 2D game view.
 _Avoid_: 3D engine, 3D map system, Unity replacement
 
+**R3D Visual Stage**:
+The formal product identity for the RPG Maker MV plugin that provides a **Visual Stage**.
+_Avoid_: proof-of-concept plugin, character overlay plugin
+
 **2D Tilemap**:
 The RPG Maker MV map layer that remains authoritative for movement, events, collision, and game-world state.
 _Avoid_: background layer, legacy map
 
 **Visual Choreography**:
-Camera, animation, pose, timing, and scene-direction data used to stage the **3D Character Overlay** or a **Presentation Scene**.
+Camera, animation, pose, timing, and scene-direction data used to stage the **3D Character Display** or a **Presentation Scene**.
 _Avoid_: gameplay interaction, world simulation
 
 **RPG Maker MV Target**:
@@ -29,7 +33,7 @@ The RPG Maker MV runtime and plugin environment that this project targets first 
 _Avoid_: RPG Maker MZ support, RPG Maker Unite support
 
 **Real Character Asset Validation**:
-A focused validation slice that proves a redistributable humanoid 3D character asset can load, render, animate, and perform acceptably inside the **3D Character Overlay**.
+A focused validation slice that proves a redistributable humanoid 3D character asset can load, render, animate, and perform acceptably inside the **3D Character Display**.
 _Avoid_: final asset pipeline, full character system
 
 **Validation Character Asset**:
@@ -38,19 +42,20 @@ _Avoid_: placeholder model, final production character, VRM baseline
 
 ## Relationships
 
-- A **3D Character Overlay** is displayed over or beside the **2D Tilemap**.
-- A **Visual Stage** may contain a **3D Character Overlay** or a **Presentation Scene**.
-- A **Presentation Scene** may include a **3D Character Overlay**, props, lighting, camera movement, and animation timing.
+- A **3D Character Display** is displayed over or beside the **2D Tilemap**.
+- A **Visual Stage** may contain a **3D Character Display** or a **Presentation Scene**.
+- **R3D Visual Stage** provides the **Visual Stage** for the **RPG Maker MV Target**.
+- A **Presentation Scene** may include a **3D Character Display**, props, lighting, camera movement, and animation timing.
 - The **2D Tilemap** remains authoritative for player movement, events, collision, and object interaction.
 - **Visual Choreography** controls presentation but does not define tilemap collision, pathfinding, or gameplay-world interaction.
 - The **RPG Maker MV Target** defines the initial runtime boundary; RPG Maker MZ and RPG Maker Unite are not baseline targets.
-- **Real Character Asset Validation** happens inside the **3D Character Overlay** before broader **Presentation Scene** work depends on real character assets.
+- **Real Character Asset Validation** happens inside the **3D Character Display** before broader **Presentation Scene** work depends on real character assets.
 - A **Validation Character Asset** is the first asset used by **Real Character Asset Validation**.
 
 ## Example dialogue
 
 > **Dev:** "Should the 3D character collide with map events?"
-> **Domain expert:** "No. The **2D Tilemap** owns collision and event interaction. The **3D Character Overlay** can react visually, but it does not participate in map simulation."
+> **Domain expert:** "No. The **2D Tilemap** owns collision and event interaction. The **3D Character Display** can react visually, but it does not participate in map simulation."
 
 > **Dev:** "Can we add camera cuts and staged animations?"
 > **Domain expert:** "Yes. That belongs to **Visual Choreography** inside a bounded **Presentation Scene**, not to a full 3D gameplay world."

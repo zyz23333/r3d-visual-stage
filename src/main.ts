@@ -1,5 +1,5 @@
 import { installRuntimeCompat } from './runtimeCompat';
-import { installR3DCharacterOverlayDemo } from './mvPlugin';
+import { installR3DVisualStage } from './mvPlugin';
 
 installRuntimeCompat();
-installR3DCharacterOverlayDemo();
+installR3DVisualStage();

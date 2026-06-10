@@ -10,9 +10,9 @@ export default defineConfig({
     emptyOutDir: true,
     lib: {
       entry: resolve(__dirname, 'src/main.ts'),
-      name: 'R3DCharacterOverlayDemo',
+      name: 'R3DVisualStage',
       formats: ['iife'],
-      fileName: () => 'R3DCharacterOverlayDemo.js',
+      fileName: () => 'R3DVisualStage.js',
     },
     minify: false,
     sourcemap: true,

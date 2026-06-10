@@ -1,31 +1,31 @@
 import { access, copyFile, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
-const PLUGIN_NAME = 'R3DCharacterOverlayDemo';
+const PLUGIN_NAME = 'R3DVisualStage';
 
-const pluginSource = resolve('dist/R3DCharacterOverlayDemo.js');
-const sourceMapSource = resolve('dist/R3DCharacterOverlayDemo.js.map');
-const modelSource = resolve('public/models/r3d-demo-character.glb');
+const pluginSource = resolve('dist/R3DVisualStage.js');
+const sourceMapSource = resolve('dist/R3DVisualStage.js.map');
+const modelSource = resolve('public/models/r3d-validation-character.glb');
 
 const pluginEntry = {
   name: PLUGIN_NAME,
   status: true,
-  description: 'R3D Visual Stage character overlay demo for RPG Maker MV.',
+  description: 'R3D Visual Stage character display for RPG Maker MV.',
   parameters: {
-    'Default Character Path': 'models/r3d-demo-character.glb',
-    'Auto Show': 'true',
-    'Overlay Width': '280',
+    'Default Character Path': 'models/r3d-validation-character.glb',
+    'Auto Show Character': 'true',
+    'Character Display Width': '280',
     'Target FPS': '30',
     'Max Pixel Ratio': '1.5',
     'File Logging': 'true',
-    'Log File Path': 'r3d-logs/R3DCharacterOverlayDemo.log',
+    'Log File Path': 'r3d-logs/R3DVisualStage.log',
     'Timestamp Log File': 'true',
   },
 };
 
 const mvProjectPath = await resolveMvProjectPath();
 await assertMvProject(mvProjectPath);
-await copyDemoFiles(mvProjectPath);
+await copyVisualStageFiles(mvProjectPath);
 await enablePlugin(mvProjectPath);
 
 console.log(`Enabled ${PLUGIN_NAME} in ${mvProjectPath}`);
@@ -47,7 +47,7 @@ async function assertMvProject(mvProjectPath) {
   }
 }
 
-async function copyDemoFiles(mvProjectPath) {
+async function copyVisualStageFiles(mvProjectPath) {
   const pluginTargetDir = resolve(mvProjectPath, 'js/plugins');
   const modelTargetDir = resolve(mvProjectPath, 'models');
 
@@ -55,7 +55,7 @@ async function copyDemoFiles(mvProjectPath) {
   await mkdir(modelTargetDir, { recursive: true });
   await copyFile(pluginSource, resolve(pluginTargetDir, `${PLUGIN_NAME}.js`));
   await copyOptional(sourceMapSource, resolve(pluginTargetDir, `${PLUGIN_NAME}.js.map`));
-  await copyFile(modelSource, resolve(modelTargetDir, 'r3d-demo-character.glb'));
+  await copyFile(modelSource, resolve(modelTargetDir, 'r3d-validation-character.glb'));
 }
 
 async function enablePlugin(mvProjectPath) {

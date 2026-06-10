@@ -1,7 +1,7 @@
-export interface OverlayConfig {
+export interface CharacterDisplayConfig {
   defaultCharacterPath: string;
-  autoShow: boolean;
-  overlayWidth: number;
+  autoShowCharacter: boolean;
+  characterDisplayWidth: number;
   targetFps: number;
   maxPixelRatio: number;
   fileLogging: boolean;
@@ -9,23 +9,28 @@ export interface OverlayConfig {
   timestampLogFile: boolean;
 }
 
-const DEFAULT_CONFIG: OverlayConfig = {
-  defaultCharacterPath: 'models/r3d-demo-character.glb',
-  autoShow: true,
-  overlayWidth: 280,
+const DEFAULT_CONFIG: CharacterDisplayConfig = {
+  defaultCharacterPath: 'models/r3d-validation-character.glb',
+  autoShowCharacter: true,
+  characterDisplayWidth: 280,
   targetFps: 30,
   maxPixelRatio: 1.5,
   fileLogging: false,
-  logFilePath: 'r3d-logs/R3DCharacterOverlayDemo.log',
+  logFilePath: 'r3d-logs/R3DVisualStage.log',
   timestampLogFile: false,
 };
 
-export function readOverlayConfig(parameters: Record<string, string | undefined>): OverlayConfig {
+export function readCharacterDisplayConfig(
+  parameters: Record<string, string | undefined>,
+): CharacterDisplayConfig {
   return {
     defaultCharacterPath:
       readString(parameters['Default Character Path']) ?? DEFAULT_CONFIG.defaultCharacterPath,
-    autoShow: readBoolean(parameters['Auto Show']) ?? DEFAULT_CONFIG.autoShow,
-    overlayWidth: readNumber(parameters['Overlay Width'], 160, 1024) ?? DEFAULT_CONFIG.overlayWidth,
+    autoShowCharacter:
+      readBoolean(parameters['Auto Show Character']) ?? DEFAULT_CONFIG.autoShowCharacter,
+    characterDisplayWidth:
+      readNumber(parameters['Character Display Width'], 160, 1024) ??
+      DEFAULT_CONFIG.characterDisplayWidth,
     targetFps: readNumber(parameters['Target FPS'], 1, 60) ?? DEFAULT_CONFIG.targetFps,
     maxPixelRatio:
       readNumber(parameters['Max Pixel Ratio'], 0.5, 4) ?? DEFAULT_CONFIG.maxPixelRatio,

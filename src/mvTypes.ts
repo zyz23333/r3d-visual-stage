@@ -37,7 +37,7 @@ declare global {
     Input?: MvInput;
     SceneManager?: MvSceneManager;
     Game_Interpreter?: MvGameInterpreterConstructor;
-    R3DCharacterOverlayDemo?: R3DOverlayPublicApi;
+    R3DVisualStage?: R3DVisualStageApi;
     require?: NwJsLikeRequire;
     process?: {
       cwd(): string;
@@ -45,10 +45,14 @@ declare global {
   }
 }
 
-export interface R3DOverlayPublicApi {
+export interface R3DVisualStageApi {
+  character: R3DVisualStageCharacterApi;
+  dispose(): void;
+}
+
+export interface R3DVisualStageCharacterApi {
   show(): void;
   hide(): void;
-  loadCharacter(path: string): Promise<void>;
+  load(path: string): Promise<void>;
   play(clipName: string): boolean;
-  dispose(): void;
 }

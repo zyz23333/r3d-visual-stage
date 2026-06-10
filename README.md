@@ -13,7 +13,7 @@ The 2D tilemap remains authoritative for player movement, events, collision, obj
 ## Core Goals
 
 - Render a persistent 3D visual layer alongside RPG Maker MV's 2D game view.
-- Support a commonly visible 3D character, such as a right-side character display or presentation overlay.
+- Support a commonly visible 3D character, such as a right-side character display.
 - Support bounded 3D presentation scenes for character display, small sets, camera work, and short visual sequences.
 - Support camera choreography, animation timing, poses, and staged visual direction.
 - Support skeletal animation for character motion and authored animation clips.
@@ -75,16 +75,16 @@ These decisions remain unresolved and should be validated through design explora
 - How small 3D presentation scenes should be loaded, staged, and released.
 - How to structure the plugin build so Three.js can be used cleanly inside RPG Maker MV's plugin environment.
 
-## Current Demo
+## Current Implementation
 
-This repository now includes the first implementation slice for the **3D Character Overlay** direction:
+This repository now includes the first implementation slice for the **3D Character Display** direction:
 
 - TypeScript source for a RPG Maker MV plugin.
 - Vite library build output targeting a normal MV plugin JavaScript file.
-- Three.js and `GLTFLoader` bundled into `R3DCharacterOverlayDemo.js`.
-- A transparent right-side overlay canvas that follows the MV game canvas and does not block pointer input.
-- MV plugin commands for `Show`, `Hide`, `LoadCharacter`, and `Play`.
-- A local placeholder GLB generator for a lightweight `Idle`/`Wave` demo character.
+- Three.js and `GLTFLoader` bundled into `R3DVisualStage.js`.
+- A transparent right-side character display canvas that follows the MV game canvas and does not block pointer input.
+- MV plugin commands for `R3DStage Character Show`, `Hide`, `Load`, and `Play`.
+- A local validation GLB generator for a lightweight `Idle`/`Wave` character.
 - A local-only copy flow for installing the built plugin and model into an external RPG Maker MV test host.
 
-See `docs/r3d-character-overlay-demo.md` for setup, build, copy, and manual verification steps.
+See `docs/r3d-character-display.md` for setup, build, copy, and manual verification steps.

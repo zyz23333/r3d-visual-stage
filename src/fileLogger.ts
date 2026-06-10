@@ -1,11 +1,11 @@
-import type { OverlayConfig } from './config';
+import type { CharacterDisplayConfig } from './config';
 
 type FsModule = typeof import('node:fs');
 type PathModule = typeof import('node:path');
 
 let fileLogger: FileLogger | undefined;
 
-export function installFileLogger(config: OverlayConfig): void {
+export function installFileLogger(config: CharacterDisplayConfig): void {
   if (!config.fileLogging) {
     return;
   }
@@ -42,7 +42,7 @@ class FileLogger {
 
   public static create(relativeLogPath: string, timestampLogFile: boolean): FileLogger | undefined {
     if (!window.require || !window.process?.cwd) {
-      console.warn('[R3D Character Overlay Demo] File logging requires NW.js.');
+      console.warn('[R3D Visual Stage] File logging requires NW.js.');
       return undefined;
     }
 
@@ -58,7 +58,7 @@ class FileLogger {
       fs.writeFileSync(logPath, `[${new Date().toISOString()}] info log started\n`, 'utf8');
       return new FileLogger(fs, logPath);
     } catch (error) {
-      console.warn('[R3D Character Overlay Demo] Failed to initialize file logging.', error);
+      console.warn('[R3D Visual Stage] Failed to initialize file logging.', error);
       return undefined;
     }
   }
@@ -76,7 +76,7 @@ class FileLogger {
 
       this.fs.appendFileSync(this.logPath, `${line}\n`, 'utf8');
     } catch (error) {
-      console.warn('[R3D Character Overlay Demo] Failed to write file log.', error);
+      console.warn('[R3D Visual Stage] Failed to write file log.', error);
     }
   }
 }

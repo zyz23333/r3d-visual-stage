@@ -1,6 +1,6 @@
 import { writeFileLog } from './fileLogger';
 
-const PREFIX = '[R3D Character Overlay Demo]';
+const PREFIX = '[R3D Visual Stage]';
 
 export function logInfo(message: string, details?: unknown): void {
   if (details === undefined) {

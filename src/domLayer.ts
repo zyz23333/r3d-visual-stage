@@ -1,28 +1,28 @@
-import type { OverlayConfig } from './config';
+import type { CharacterDisplayConfig } from './config';
 
-export interface OverlayViewport {
+export interface DomLayerViewport {
   width: number;
   height: number;
 }
 
-export interface OverlayDiagnostics {
+export interface DomLayerDiagnostics {
   display: string;
   isBodyLastChild: boolean;
   isMounted: boolean;
-  viewport: OverlayViewport;
+  viewport: DomLayerViewport;
   zIndex: string;
 }
 
-export class DomOverlay {
+export class DomLayer {
   private readonly canvas: HTMLCanvasElement;
-  private readonly config: OverlayConfig;
-  private viewport: OverlayViewport = { width: 1, height: 1 };
+  private readonly config: CharacterDisplayConfig;
+  private viewport: DomLayerViewport = { width: 1, height: 1 };
   private visible = false;
 
-  public constructor(canvas: HTMLCanvasElement, config: OverlayConfig) {
+  public constructor(canvas: HTMLCanvasElement, config: CharacterDisplayConfig) {
     this.canvas = canvas;
     this.config = config;
-    this.canvas.id = 'R3DCharacterOverlayCanvas';
+    this.canvas.id = 'R3DCharacterDisplayCanvas';
     this.applyBaseStyles();
     this.canvas.style.display = 'none';
   }
@@ -37,7 +37,7 @@ export class DomOverlay {
     this.canvas.style.display = 'none';
   }
 
-  public updateLayout(): OverlayViewport {
+  public updateLayout(): DomLayerViewport {
     const gameCanvas = window.Graphics?._canvas;
     if (!gameCanvas) {
       return this.viewport;
@@ -47,17 +47,17 @@ export class DomOverlay {
 
     const bounds = gameCanvas.getBoundingClientRect();
     const scaleX = bounds.width / Math.max(window.Graphics?.width ?? bounds.width, 1);
-    const overlayCssWidth = Math.min(this.config.overlayWidth * scaleX, bounds.width);
+    const displayCssWidth = Math.min(this.config.characterDisplayWidth * scaleX, bounds.width);
 
     this.canvas.style.top = `${bounds.top + window.scrollY}px`;
-    this.canvas.style.left = `${bounds.right + window.scrollX - overlayCssWidth}px`;
+    this.canvas.style.left = `${bounds.right + window.scrollX - displayCssWidth}px`;
     this.canvas.style.right = 'auto';
     this.canvas.style.bottom = 'auto';
-    this.canvas.style.width = `${overlayCssWidth}px`;
+    this.canvas.style.width = `${displayCssWidth}px`;
     this.canvas.style.height = `${bounds.height}px`;
 
     this.viewport = {
-      width: Math.max(Math.floor(overlayCssWidth), 1),
+      width: Math.max(Math.floor(displayCssWidth), 1),
       height: Math.max(Math.floor(bounds.height), 1),
     };
 
@@ -68,7 +68,7 @@ export class DomOverlay {
     this.canvas.remove();
   }
 
-  public diagnostics(): OverlayDiagnostics {
+  public diagnostics(): DomLayerDiagnostics {
     return {
       display: this.canvas.style.display,
       isBodyLastChild: document.body.lastElementChild === this.canvas,

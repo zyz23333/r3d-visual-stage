@@ -1,36 +1,36 @@
 /*:
- * @plugindesc R3D Visual Stage character overlay demo for RPG Maker MV.
+ * @plugindesc R3D Visual Stage character display for RPG Maker MV.
  * @author R3D Visual Stage
  *
  * @param Default Character Path
  * @type string
- * @default models/r3d-demo-character.glb
+ * @default models/r3d-validation-character.glb
  * @desc GLB/glTF asset path relative to the RPG Maker MV project root.
  *
- * @param Auto Show
+ * @param Auto Show Character
  * @type boolean
  * @default true
- * @desc Show the overlay after the plugin initializes.
+ * @desc Show the character display after the plugin initializes.
  *
- * @param Overlay Width
+ * @param Character Display Width
  * @type number
  * @min 160
  * @default 280
- * @desc Right-side overlay width in MV canvas pixels before browser scaling.
+ * @desc Right-side character display width in MV canvas pixels before browser scaling.
  *
  * @param Target FPS
  * @type number
  * @min 1
  * @max 60
  * @default 30
- * @desc Maximum Three.js render rate for the demo overlay.
+ * @desc Maximum Three.js render rate for the character display.
  *
  * @param Max Pixel Ratio
  * @type number
  * @decimals 2
  * @min 0.5
  * @default 1.5
- * @desc Pixel ratio cap used by the transparent overlay renderer.
+ * @desc Pixel ratio cap used by the transparent character display renderer.
  *
  * @param File Logging
  * @type boolean
@@ -39,7 +39,7 @@
  *
  * @param Log File Path
  * @type string
- * @default r3d-logs/R3DCharacterOverlayDemo.log
+ * @default r3d-logs/R3DVisualStage.log
  * @desc Local log path relative to the RPG Maker MV project root.
  *
  * @param Timestamp Log File
@@ -48,24 +48,24 @@
  * @desc Add a startup timestamp to the log file name so each playtest run writes a separate file.
  *
  * @help
- * R3D Character Overlay Demo
+ * R3D Visual Stage
  *
- * This is an early proof-of-concept plugin for RPG Maker MV. It renders a
- * transparent, right-side Three.js character overlay while RPG Maker MV's 2D
+ * This plugin renders a transparent, right-side Three.js character display
+ * while RPG Maker MV's 2D
  * tilemap remains authoritative for movement, events, collision, menus, and
  * game state.
  *
  * Plugin commands:
  *
- *   R3DOverlay Show
- *   R3DOverlay Hide
- *   R3DOverlay LoadCharacter models/r3d-demo-character.glb
- *   R3DOverlay Play Idle
- *   R3DOverlay Play Wave
+ *   R3DStage Character Show
+ *   R3DStage Character Hide
+ *   R3DStage Character Load models/r3d-validation-character.glb
+ *   R3DStage Character Play Idle
+ *   R3DStage Character Play Wave
  *
- * The demo also listens for the MV "ok" input and attempts to play Wave when
- * that clip exists in the loaded GLB. Missing clips and failed model loads are
- * reported to the browser console without stopping the MV game loop.
+ * The plugin also listens for the MV "ok" input and attempts to play Wave
+ * when that clip exists in the loaded GLB. Missing clips and failed model loads
+ * are reported to the browser console without stopping the MV game loop.
  *
  * During RPG Maker MV playtest, set File Logging to true to write diagnostics
  * under the MV project root. Enable Timestamp Log File to keep one separate log

@@ -3,15 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "R3D Visual Stage RPG Maker MV character overlay demo.",
+  "description": "R3D Visual Stage RPG Maker MV character display plugin.",
   "scripts": {
     "build": "vite build",
     "check": "tsc --noEmit",
     "lint": "eslint .",
-    "format": "prettier --write package.json tsconfig.json vite.config.ts eslint.config.js \"docs/r3d-character-overlay-demo.md\" \"scripts/**/*.mjs\" \"src/**/*.{js,ts}\"",
-    "generate:demo-asset": "node scripts/generate-demo-asset.mjs",
+    "format": "prettier --write package.json tsconfig.json vite.config.ts eslint.config.js \"docs/r3d-character-display.md\" \"scripts/**/*.mjs\" \"src/**/*.{js,ts}\"",
+    "generate:validation-asset": "node scripts/generate-validation-asset.mjs",
     "copy:mv": "node scripts/copy-to-mv-host.mjs",
-    "enable:mv-demo": "npm run generate:demo-asset && npm run build && node scripts/enable-mv-demo.mjs",
+    "enable:mv-test-host": "npm run generate:validation-asset && npm run build && node scripts/enable-mv-test-host.mjs",
     "serve:mv": "node scripts/serve-mv-project.mjs"
   },
   "dependencies": {
