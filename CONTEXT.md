@@ -28,6 +28,14 @@ _Avoid_: gameplay interaction, world simulation
 The RPG Maker MV runtime and plugin environment that this project targets first and exclusively for now.
 _Avoid_: RPG Maker MZ support, RPG Maker Unite support
 
+**Real Character Asset Validation**:
+A focused validation slice that proves a redistributable humanoid 3D character asset can load, render, animate, and perform acceptably inside the **3D Character Overlay**.
+_Avoid_: final asset pipeline, full character system
+
+**Validation Character Asset**:
+A redistributable humanoid GLB/glTF character asset used to validate the first real-character path before VRM-specific capabilities are considered.
+_Avoid_: placeholder model, final production character, VRM baseline
+
 ## Relationships
 
 - A **3D Character Overlay** is displayed over or beside the **2D Tilemap**.
@@ -36,6 +44,8 @@ _Avoid_: RPG Maker MZ support, RPG Maker Unite support
 - The **2D Tilemap** remains authoritative for player movement, events, collision, and object interaction.
 - **Visual Choreography** controls presentation but does not define tilemap collision, pathfinding, or gameplay-world interaction.
 - The **RPG Maker MV Target** defines the initial runtime boundary; RPG Maker MZ and RPG Maker Unite are not baseline targets.
+- **Real Character Asset Validation** happens inside the **3D Character Overlay** before broader **Presentation Scene** work depends on real character assets.
+- A **Validation Character Asset** is the first asset used by **Real Character Asset Validation**.
 
 ## Example dialogue
 
