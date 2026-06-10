@@ -11,7 +11,8 @@
     "format": "prettier --write package.json tsconfig.json vite.config.ts eslint.config.js \"docs/r3d-character-overlay-demo.md\" \"scripts/**/*.mjs\" \"src/**/*.{js,ts}\"",
     "generate:demo-asset": "node scripts/generate-demo-asset.mjs",
     "copy:mv": "node scripts/copy-to-mv-host.mjs",
-    "enable:mv-demo": "npm run generate:demo-asset && npm run build && node scripts/enable-mv-demo.mjs"
+    "enable:mv-demo": "npm run generate:demo-asset && npm run build && node scripts/enable-mv-demo.mjs",
+    "serve:mv": "node scripts/serve-mv-project.mjs"
   },
   "dependencies": {
     "three": "^0.184.0"
@@ -21,6 +22,7 @@
     "@types/node": "^25.9.2",
     "@types/three": "^0.184.1",
     "eslint": "^10.4.1",
+    "http-server": "^14.1.1",
     "prettier": "^3.8.4",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.61.0",

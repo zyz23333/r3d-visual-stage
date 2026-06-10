@@ -83,6 +83,36 @@ plugin and model into the MV project, and inserts or updates the
 true`. The command intentionally requires `.r3d-local.json`; it does not fall
 back to any repository-local reference project.
 
+## Serve The Local MV Test Host
+
+The configured `.r3d-local.json` project can be served over HTTP with:
+
+```sh
+npm run serve:mv
+```
+
+This command reads `mvProjectPath`, validates that it points at an RPG Maker MV
+project with `Game.rpgproject` and `index.html`, then starts `http-server` from
+that project root. By default, the game is available at:
+
+```text
+http://127.0.0.1:8080/
+```
+
+To use a different address or port:
+
+```powershell
+$env:HOST = "127.0.0.1"
+$env:PORT = "8081"
+npm run serve:mv
+```
+
+For POSIX shells:
+
+```sh
+HOST=127.0.0.1 PORT=8081 npm run serve:mv
+```
+
 ## Plugin Parameters
 
 - `Default Character Path`: default `models/r3d-demo-character.glb`
