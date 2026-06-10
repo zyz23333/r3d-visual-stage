@@ -42,11 +42,13 @@ class R3DAbortController {
   }
 }
 
+type RuntimeGlobal = {
+  AbortController?: typeof AbortController;
+  AbortSignal?: typeof AbortSignal;
+};
+
 export function installRuntimeCompat(): void {
-  const globalObject = globalThis as typeof globalThis & {
-    AbortController?: typeof AbortController;
-    AbortSignal?: typeof AbortSignal;
-  };
+  const globalObject = getRuntimeGlobal();
 
   if (typeof globalObject.AbortController === 'undefined') {
     globalObject.AbortController = R3DAbortController as unknown as typeof AbortController;
@@ -55,4 +57,20 @@ export function installRuntimeCompat(): void {
   if (typeof globalObject.AbortSignal === 'undefined') {
     globalObject.AbortSignal = R3DAbortSignal as unknown as typeof AbortSignal;
   }
+}
+
+function getRuntimeGlobal(): RuntimeGlobal {
+  if (typeof globalThis !== 'undefined') {
+    return globalThis as RuntimeGlobal;
+  }
+
+  if (typeof window !== 'undefined') {
+    return window as RuntimeGlobal;
+  }
+
+  if (typeof self !== 'undefined') {
+    return self as RuntimeGlobal;
+  }
+
+  return {};
 }

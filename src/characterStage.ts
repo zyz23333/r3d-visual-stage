@@ -20,6 +20,8 @@ export class CharacterStage {
   private lastRenderMs = 0;
   private isVisible = false;
   private hasLoadedDefault = false;
+  private hasLoggedFirstLayout = false;
+  private hasLoggedFirstRender = false;
 
   public constructor(config: OverlayConfig) {
     this.config = config;
@@ -41,6 +43,7 @@ export class CharacterStage {
   public show(): void {
     this.isVisible = true;
     this.domOverlay.show();
+    logInfo('Overlay shown.');
 
     if (!this.hasLoadedDefault && this.config.defaultCharacterPath) {
       this.hasLoadedDefault = true;
@@ -59,6 +62,8 @@ export class CharacterStage {
       logWarning('LoadCharacter ignored because the path was empty.');
       return;
     }
+
+    logInfo(`Loading character: ${trimmedPath}`);
 
     try {
       const gltf = await this.loader.loadAsync(trimmedPath);
@@ -128,6 +133,11 @@ export class CharacterStage {
     this.lastRenderMs = nowMs;
 
     const viewport = this.domOverlay.updateLayout();
+    if (!this.hasLoggedFirstLayout) {
+      this.hasLoggedFirstLayout = true;
+      logInfo('Overlay layout ready.', this.domOverlay.diagnostics());
+    }
+
     this.renderer.setSize(viewport.width, viewport.height, false);
     this.camera.aspect = viewport.width / viewport.height;
     this.camera.updateProjectionMatrix();
@@ -135,6 +145,15 @@ export class CharacterStage {
     const delta = Math.min(this.clock.getDelta(), 0.1);
     this.mixer?.update(delta);
     this.renderer.render(this.scene, this.camera);
+
+    if (!this.hasLoggedFirstRender) {
+      this.hasLoggedFirstRender = true;
+      logInfo('Overlay first render completed.', {
+        hasModel: Boolean(this.model),
+        hasMixer: Boolean(this.mixer),
+        viewport,
+      });
+    }
   }
 
   public dispose(): void {

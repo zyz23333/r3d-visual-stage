@@ -1,4 +1,5 @@
 import { readOverlayConfig } from './config';
+import { installFileLogger } from './fileLogger';
 import { logInfo, logWarning } from './diagnostics';
 import { CharacterStage } from './characterStage';
 import type { R3DOverlayPublicApi } from './mvTypes';
@@ -8,7 +9,10 @@ const COMMAND_PREFIXES = new Set(['R3DOverlay', 'R3DCharacterOverlayDemo']);
 
 export function installR3DCharacterOverlayDemo(): void {
   const parameters = window.PluginManager?.parameters(PLUGIN_NAME) ?? {};
-  const stage = new CharacterStage(readOverlayConfig(parameters));
+  const config = readOverlayConfig(parameters);
+  installFileLogger(config);
+
+  const stage = new CharacterStage(config);
   const api: R3DOverlayPublicApi = {
     show: () => stage.show(),
     hide: () => stage.hide(),
@@ -21,7 +25,7 @@ export function installR3DCharacterOverlayDemo(): void {
   installPluginCommandRoute(stage);
   installSceneUpdateHook(stage);
 
-  if (readOverlayConfig(parameters).autoShow) {
+  if (config.autoShow) {
     stage.show();
   }
 

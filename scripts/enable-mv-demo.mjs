@@ -17,6 +17,9 @@ const pluginEntry = {
     'Overlay Width': '280',
     'Target FPS': '30',
     'Max Pixel Ratio': '1.5',
+    'File Logging': 'true',
+    'Log File Path': 'r3d-logs/R3DCharacterOverlayDemo.log',
+    'Timestamp Log File': 'true',
   },
 };
 

@@ -5,35 +5,35 @@ export interface OverlayViewport {
   height: number;
 }
 
+export interface OverlayDiagnostics {
+  display: string;
+  isBodyLastChild: boolean;
+  isMounted: boolean;
+  viewport: OverlayViewport;
+  zIndex: string;
+}
+
 export class DomOverlay {
   private readonly canvas: HTMLCanvasElement;
   private readonly config: OverlayConfig;
   private viewport: OverlayViewport = { width: 1, height: 1 };
+  private visible = false;
 
   public constructor(canvas: HTMLCanvasElement, config: OverlayConfig) {
     this.canvas = canvas;
     this.config = config;
     this.canvas.id = 'R3DCharacterOverlayCanvas';
-    this.canvas.style.position = 'absolute';
-    this.canvas.style.margin = 'auto';
-    this.canvas.style.pointerEvents = 'none';
-    this.canvas.style.zIndex = '4';
-    this.canvas.style.background = 'transparent';
+    this.applyBaseStyles();
     this.canvas.style.display = 'none';
   }
 
-  public ensureMounted(): void {
-    if (!this.canvas.parentElement) {
-      document.body.appendChild(this.canvas);
-    }
-  }
-
   public show(): void {
-    this.ensureMounted();
+    this.visible = true;
     this.canvas.style.display = 'block';
   }
 
   public hide(): void {
+    this.visible = false;
     this.canvas.style.display = 'none';
   }
 
@@ -42,6 +42,8 @@ export class DomOverlay {
     if (!gameCanvas) {
       return this.viewport;
     }
+
+    this.ensureMountedAboveMvCanvases();
 
     const bounds = gameCanvas.getBoundingClientRect();
     const scaleX = bounds.width / Math.max(window.Graphics?.width ?? bounds.width, 1);
@@ -64,5 +66,32 @@ export class DomOverlay {
 
   public dispose(): void {
     this.canvas.remove();
+  }
+
+  public diagnostics(): OverlayDiagnostics {
+    return {
+      display: this.canvas.style.display,
+      isBodyLastChild: document.body.lastElementChild === this.canvas,
+      isMounted: Boolean(this.canvas.parentElement),
+      viewport: this.viewport,
+      zIndex: this.canvas.style.zIndex,
+    };
+  }
+
+  private ensureMountedAboveMvCanvases(): void {
+    this.applyBaseStyles();
+    this.canvas.style.display = this.visible ? 'block' : 'none';
+
+    if (!this.canvas.parentElement || document.body.lastElementChild !== this.canvas) {
+      document.body.appendChild(this.canvas);
+    }
+  }
+
+  private applyBaseStyles(): void {
+    this.canvas.style.position = 'absolute';
+    this.canvas.style.margin = 'auto';
+    this.canvas.style.pointerEvents = 'none';
+    this.canvas.style.zIndex = '4';
+    this.canvas.style.background = 'transparent';
   }
 }

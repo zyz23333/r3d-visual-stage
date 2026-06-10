@@ -32,6 +32,21 @@
  * @default 1.5
  * @desc Pixel ratio cap used by the transparent overlay renderer.
  *
+ * @param File Logging
+ * @type boolean
+ * @default false
+ * @desc Write diagnostics to a local log file when running in RPG Maker MV playtest/NW.js.
+ *
+ * @param Log File Path
+ * @type string
+ * @default r3d-logs/R3DCharacterOverlayDemo.log
+ * @desc Local log path relative to the RPG Maker MV project root.
+ *
+ * @param Timestamp Log File
+ * @type boolean
+ * @default false
+ * @desc Add a startup timestamp to the log file name so each playtest run writes a separate file.
+ *
  * @help
  * R3D Character Overlay Demo
  *
@@ -51,4 +66,9 @@
  * The demo also listens for the MV "ok" input and attempts to play Wave when
  * that clip exists in the loaded GLB. Missing clips and failed model loads are
  * reported to the browser console without stopping the MV game loop.
+ *
+ * During RPG Maker MV playtest, set File Logging to true to write diagnostics
+ * under the MV project root. Enable Timestamp Log File to keep one separate log
+ * per playtest run. The file logger only runs in NW.js and is skipped for
+ * normal browser Web deployment.
  */

@@ -24,6 +24,12 @@ export interface MvGameInterpreterConstructor {
   };
 }
 
+interface NwJsLikeRequire {
+  (moduleName: 'fs'): typeof import('node:fs');
+  (moduleName: 'path'): typeof import('node:path');
+  (moduleName: string): unknown;
+}
+
 declare global {
   interface Window {
     PluginManager?: MvPluginManager;
@@ -32,6 +38,10 @@ declare global {
     SceneManager?: MvSceneManager;
     Game_Interpreter?: MvGameInterpreterConstructor;
     R3DCharacterOverlayDemo?: R3DOverlayPublicApi;
+    require?: NwJsLikeRequire;
+    process?: {
+      cwd(): string;
+    };
   }
 }
 

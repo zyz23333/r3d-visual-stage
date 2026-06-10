@@ -4,6 +4,9 @@ export interface OverlayConfig {
   overlayWidth: number;
   targetFps: number;
   maxPixelRatio: number;
+  fileLogging: boolean;
+  logFilePath: string;
+  timestampLogFile: boolean;
 }
 
 const DEFAULT_CONFIG: OverlayConfig = {
@@ -12,6 +15,9 @@ const DEFAULT_CONFIG: OverlayConfig = {
   overlayWidth: 280,
   targetFps: 30,
   maxPixelRatio: 1.5,
+  fileLogging: false,
+  logFilePath: 'r3d-logs/R3DCharacterOverlayDemo.log',
+  timestampLogFile: false,
 };
 
 export function readOverlayConfig(parameters: Record<string, string | undefined>): OverlayConfig {
@@ -23,6 +29,10 @@ export function readOverlayConfig(parameters: Record<string, string | undefined>
     targetFps: readNumber(parameters['Target FPS'], 1, 60) ?? DEFAULT_CONFIG.targetFps,
     maxPixelRatio:
       readNumber(parameters['Max Pixel Ratio'], 0.5, 4) ?? DEFAULT_CONFIG.maxPixelRatio,
+    fileLogging: readBoolean(parameters['File Logging']) ?? DEFAULT_CONFIG.fileLogging,
+    logFilePath: readString(parameters['Log File Path']) ?? DEFAULT_CONFIG.logFilePath,
+    timestampLogFile:
+      readBoolean(parameters['Timestamp Log File']) ?? DEFAULT_CONFIG.timestampLogFile,
   };
 }
 
