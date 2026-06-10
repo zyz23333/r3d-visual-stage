@@ -16,7 +16,7 @@ export default defineConfig({
     },
     minify: false,
     sourcemap: true,
-    target: 'es2020',
+    target: 'chrome61',
     rollupOptions: {
       output: {
         banner: pluginHeader,
