@@ -90,6 +90,22 @@ back to any repository-local reference project.
 - `Overlay Width`: default `280`
 - `Target FPS`: default `30`
 - `Max Pixel Ratio`: default `1.5`
+- `File Logging`: default `false`
+- `Log File Path`: default `r3d-logs/R3DCharacterOverlayDemo.log`
+- `Timestamp Log File`: default `false`
+
+`File Logging` is intended for RPG Maker MV playtest/NW.js debugging. When it is
+enabled, diagnostics are written relative to the MV project root. When
+`Timestamp Log File` is also enabled, each playtest run writes a separate log
+file, such as:
+
+```text
+r3d-logs/R3DCharacterOverlayDemo-2026-06-10T07-47-23-482Z.log
+```
+
+`npm run enable:mv-demo` enables file logging and timestamped log files in the
+configured local MV test host so playtest diagnostics are available without
+opening DevTools first.
 
 ## Plugin Commands
 
@@ -125,6 +141,55 @@ In RPG Maker MV playtest or Web deployment served over HTTP:
    with the MV game canvas.
 7. Test a missing clip, such as `R3DOverlay Play MissingClip`, and confirm the MV
    game loop continues while the browser console reports a useful warning.
+
+For RPG Maker MV playtest, also inspect the latest log file under
+`<MV project>/r3d-logs/`. A successful default startup should include these
+milestones:
+
+```text
+File logger installed.
+Overlay shown.
+Loading character: models/r3d-demo-character.glb
+Plugin installed.
+Loaded character: models/r3d-demo-character.glb
+Overlay layout ready.
+Overlay first render completed.
+```
+
+`Overlay layout ready` includes a small DOM diagnostics snapshot. The important
+fields are:
+
+- `isMounted`: the overlay canvas has been attached to the document.
+- `isBodyLastChild`: the overlay canvas is above MV's `GameCanvas` and
+  `UpperCanvas` in body order.
+- `zIndex`: should be `4` in the demo.
+- `viewport`: should have non-zero width and height.
+
+If the model loads but the overlay is not visible, check these diagnostics before
+debugging the GLB loader. RPG Maker MV playtest creates and updates its own
+canvas elements during `Graphics.initialize()`, so the demo waits until
+`Graphics._canvas` exists, then mounts the overlay canvas above MV's canvases and
+keeps it aligned during layout updates.
+
+RPG Maker MV 1.6.x playtest runs inside an older NW.js/Chromium runtime than
+modern desktop Chrome. Keep the demo bundle target at `chrome61` in
+`vite.config.ts` unless a newer target is explicitly revalidated in MV playtest.
+An `es2020` bundle can leave syntax such as optional chaining or nullish
+coalescing in the generated plugin and fail before any plugin diagnostics run.
+
+The demo installs a small runtime compatibility layer from `src/runtimeCompat.ts`
+before creating the overlay. It currently supplies the minimal
+`AbortController`/`AbortSignal` surface that Three.js `FileLoader` needs in MV
+playtest. If a future Three.js upgrade or MV runtime change removes the need,
+verify by loading the GLB in MV playtest before deleting this compatibility
+layer.
+
+The warning below is expected with the current Three.js build and is not known to
+block the demo:
+
+```text
+THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.
+```
 
 ## Known Demo Limits
 
