@@ -1,0 +1,29 @@
+{
+  "name": "r3d-visual-stage",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "R3D Visual Stage RPG Maker MV character overlay demo.",
+  "scripts": {
+    "build": "vite build",
+    "check": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write package.json tsconfig.json vite.config.ts eslint.config.js \"docs/r3d-character-overlay-demo.md\" \"scripts/**/*.mjs\" \"src/**/*.{js,ts}\"",
+    "generate:demo-asset": "node scripts/generate-demo-asset.mjs",
+    "copy:mv": "node scripts/copy-to-mv-host.mjs",
+    "enable:mv-demo": "npm run generate:demo-asset && npm run build && node scripts/enable-mv-demo.mjs"
+  },
+  "dependencies": {
+    "three": "^0.184.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^25.9.2",
+    "@types/three": "^0.184.1",
+    "eslint": "^10.4.1",
+    "prettier": "^3.8.4",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.61.0",
+    "vite": "^8.0.16"
+  }
+}

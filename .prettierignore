@@ -1,0 +1,6 @@
+dist/
+node_modules/
+references/
+demo_artifacts/
+package-lock.json
+public/models/*.glb

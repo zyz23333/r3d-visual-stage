@@ -74,3 +74,17 @@ These decisions remain unresolved and should be validated through design explora
 - How visual choreography should be authored and triggered from MV.
 - How small 3D presentation scenes should be loaded, staged, and released.
 - How to structure the plugin build so Three.js can be used cleanly inside RPG Maker MV's plugin environment.
+
+## Current Demo
+
+This repository now includes the first implementation slice for the **3D Character Overlay** direction:
+
+- TypeScript source for a RPG Maker MV plugin.
+- Vite library build output targeting a normal MV plugin JavaScript file.
+- Three.js and `GLTFLoader` bundled into `R3DCharacterOverlayDemo.js`.
+- A transparent right-side overlay canvas that follows the MV game canvas and does not block pointer input.
+- MV plugin commands for `Show`, `Hide`, `LoadCharacter`, and `Play`.
+- A local placeholder GLB generator for a lightweight `Idle`/`Wave` demo character.
+- A local-only copy flow for installing the built plugin and model into an external RPG Maker MV test host.
+
+See `docs/r3d-character-overlay-demo.md` for setup, build, copy, and manual verification steps.
