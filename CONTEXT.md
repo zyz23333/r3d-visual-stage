@@ -12,6 +12,14 @@ _Avoid_: 3D Character Overlay, 3D map actor, 3D player character
 A bounded 3D visual scene used for character display, camera work, animation staging, or short visual sequences.
 _Avoid_: 3D world, gameplay map, full 3D level
 
+**Presentation Scene Definition**:
+A declarative description of a **Presentation Scene** used to author bounded visual staging content.
+_Avoid_: Unity-like scene, game level, 3D gameplay scene
+
+**R3D Scene File**:
+A JSON file containing a **Presentation Scene Definition** for **R3D Visual Stage**.
+_Avoid_: Unity scene file, level file, map file
+
 **Visual Stage**:
 The bounded 3D presentation layer provided by **R3D Visual Stage** alongside RPG Maker MV's 2D game view.
 _Avoid_: 3D engine, 3D map system, Unity replacement
@@ -43,6 +51,8 @@ _Avoid_: placeholder model, final production character, VRM baseline
 ## Relationships
 
 - A **3D Character Display** is displayed over or beside the **2D Tilemap**.
+- A **Presentation Scene Definition** describes one **Presentation Scene**.
+- An **R3D Scene File** stores one **Presentation Scene Definition**.
 - A **Visual Stage** may contain a **3D Character Display** or a **Presentation Scene**.
 - **R3D Visual Stage** provides the **Visual Stage** for the **RPG Maker MV Target**.
 - A **Presentation Scene** may include a **3D Character Display**, props, lighting, camera movement, and animation timing.
