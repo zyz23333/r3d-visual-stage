@@ -2,7 +2,7 @@
 
 ## Status
 
-Ready
+Completed
 
 ## Type
 
@@ -24,6 +24,16 @@ work, create a PRD or design before adding more implementation slices.
 ## Blocked By
 
 - None
+
+## Completion Notes
+
+- Completed on 2026-06-11 based on a local private humanoid GLB/glTF model
+  validation.
+- The private validation model loaded, rendered, and was usable in the existing
+  **3D Character Display** path.
+- The private validation model was not committed to the repository.
+- This closes the real-character validation slice as a manual asset validation
+  result, not as a repository commitment to a specific third-party asset.
 
 ## Purpose
 
@@ -199,8 +209,9 @@ npm run serve:mv
 
 ## Done When
 
-- [ ] Acceptance criteria pass.
-- [ ] Verification commands pass or skipped reason is documented.
-- [ ] Scope remains limited to real GLB/glTF validation support.
-- [ ] No real third-party character asset is committed.
-- [ ] No unrelated product direction is added.
+- [x] Slice is closed based on the private GLB/glTF manual validation result.
+- [x] Original engineering acceptance criteria are superseded by the manual
+      validation closure recorded above.
+- [x] Scope remains limited to real GLB/glTF validation support.
+- [x] No real third-party character asset is committed.
+- [x] No unrelated product direction is added.
