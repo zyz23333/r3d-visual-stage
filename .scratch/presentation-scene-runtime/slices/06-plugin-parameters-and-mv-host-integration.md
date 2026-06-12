@@ -1,4 +1,4 @@
-# Slice 05: Plugin Parameters And MV Host Integration
+# Slice 06: Plugin Parameters And MV Host Integration
 
 ## Status
 
@@ -19,7 +19,7 @@ External issue: none
 ## Blocked By
 
 - Slice 02: Validation Scene Asset Flow
-- Slice 04: Scene Path Loading And Public Control Surface
+- Slice 05: Scene Path Loading And Public Control Surface
 
 ## Purpose
 
@@ -41,11 +41,12 @@ Migrate plugin parameters, plugin help text, and local MV host scripts from char
 - No preservation of old character parameter names as compatibility aliases.
 - No external issue publication.
 - No fullscreen layout support.
+- No change to the default `scenes/` directory decision.
 
 ## Design References
 
 - Requirements: REQ-03, REQ-04, REQ-08
-- Decisions: `Default Scene Path`; `Auto Show Scene`; `Stage Placement = right`; `Stage Width = 280`; old Character API/commands are explicitly removed
+- Decisions: `Default Scene Path`; `Auto Show Scene`; `Stage Placement = right`; `Stage Width = 280`; default **R3D Scene File** directory is `scenes/`; old Character API/commands/parameters are explicitly removed
 - Invariants: default validation flow is local-only; Vite target remains MV-compatible; Visual Stage must not block pointer input
 - Completion Contract: OT-01, DOC-02, DOC-04
 - Canonical docs: `../presentation-scene-runtime-design.md`, `../../../../src/config.ts`, `../../../../src/mv-plugin-header.js`, `../../../../scripts/copy-to-mv-host.mjs`, `../../../../scripts/enable-mv-test-host.mjs`, `../../../../package.json`
@@ -64,7 +65,13 @@ Replace config and plugin metadata with scene-oriented names:
 - `Stage Width`, default `280`
 - existing target FPS, max pixel ratio, and logging params remain
 
-Update scripts so the generated scene JSON is copied to `<MV project>/scenes/r3d-validation-scene.r3dscene.json`, and `enable:mv-test-host` writes the new parameters to `js/plugins.js`.
+Update scripts so the generated scene JSON is copied to:
+
+```text
+<MV project>/scenes/r3d-validation-scene.r3dscene.json
+```
+
+and `enable:mv-test-host` writes the new parameters to `js/plugins.js`.
 
 ## Acceptance Criteria
 
@@ -72,7 +79,7 @@ Update scripts so the generated scene JSON is copied to `<MV project>/scenes/r3d
 - [ ] Old character parameter names are not preserved as compatibility aliases.
 - [ ] Plugin header documents scene-oriented parameters and Scene commands only.
 - [ ] `Default Scene Path` default is `scenes/r3d-validation-scene.r3dscene.json`.
-- [ ] `Stage Placement` accepts only `right` for this change.
+- [ ] `Stage Placement` accepts only `right` or falls back to `right` with diagnostics.
 - [ ] Copy script installs the generated scene JSON into `<MV project>/scenes/`.
 - [ ] Enable script writes scene-oriented plugin parameters and copies the scene JSON.
 - [ ] Script error messages reference the current scene-centered documentation path when available.
@@ -84,10 +91,10 @@ Because the project has no external users yet, do not add migration compatibilit
 
 ## Suggested Task Plan
 
-1. Add or update tests.
-2. Implement the smallest production change.
-3. Run focused verification.
-4. Update docs if required.
+1. Add or update focused tests for config parsing if the project test setup supports them.
+2. Update config parsing and plugin header metadata.
+3. Update MV host copy/enable scripts.
+4. Run generation and static checks.
 5. Report changed files and verification result.
 
 ## Verification Commands

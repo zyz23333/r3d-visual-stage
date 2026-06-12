@@ -16,6 +16,10 @@ _Avoid_: 3D world, gameplay map, full 3D level
 A declarative description of a **Presentation Scene** used to author bounded visual staging content.
 _Avoid_: Unity-like scene, game level, 3D gameplay scene
 
+**Presentation Camera**:
+A named camera inside a **Presentation Scene** used to choose the rendered view of bounded visual staging content.
+_Avoid_: Unity camera, gameplay camera, camera component
+
 **R3D Scene File**:
 A JSON file containing a **Presentation Scene Definition** for **R3D Visual Stage**.
 _Avoid_: Unity scene file, level file, map file
@@ -52,6 +56,8 @@ _Avoid_: placeholder model, final production character, VRM baseline
 
 - A **3D Character Display** is displayed over or beside the **2D Tilemap**.
 - A **Presentation Scene Definition** describes one **Presentation Scene**.
+- A **Presentation Scene** may define one or more **Presentation Cameras**.
+- One **Presentation Camera** is active for rendering a **Presentation Scene** at a time.
 - An **R3D Scene File** stores one **Presentation Scene Definition**.
 - A **Visual Stage** may contain a **3D Character Display** or a **Presentation Scene**.
 - **R3D Visual Stage** provides the **Visual Stage** for the **RPG Maker MV Target**.
