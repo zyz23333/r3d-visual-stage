@@ -49,7 +49,7 @@ Expose the scene-oriented runtime through the public JavaScript API and RPG Make
 ## Design References
 
 - Requirements: REQ-01, REQ-02, REQ-03
-- Decisions: JS API supports path and in-memory definition; MV plugin command supports path only; XHR scene text loader; strict JSON; scene file load/parse/validation diagnostics; `show`, `hide`, `setCamera`, `play`; old `Character` API and commands are explicitly deleted; command animation playback requires `modelId + clipName`
+- Decisions: JS API supports path and in-memory definition; MV plugin command supports path only; XHR scene text loader; strict JSON; scene file load/parse/validation diagnostics; default `r3d/` resource namespace; normalized project-root-relative paths with backslash normalization; path validation rejects empty, absolute, drive-letter, URL, protocol-relative, and parent-directory traversal; `show`, `hide`, `setCamera`, `play`; old `Character` API and commands are explicitly deleted; command animation playback requires `modelId + clipName`
 - Invariants: MV plugin command failures must log diagnostics without stopping MV game loop; runtime compatibility installs before Three.js loading paths need it; failed load preserves active scene; failed/stale load never changes visibility
 - Completion Contract: OT-01, OT-02, OT-03, OT-04, OUT-01, OUT-02
 - Canonical docs: `../presentation-scene-runtime-design.md`, `../../../../src/mvPlugin.ts`, `../../../../src/mvTypes.ts`, `../../../../src/main.ts`, `../../../../references/corescript/js/rpg_managers/DataManager.js`
@@ -75,14 +75,14 @@ window.R3DVisualStage.dispose(): void;
 MV commands:
 
 ```text
-R3DStage Scene Load scenes/r3d-validation-scene.r3dscene.json
+R3DStage Scene Load r3d/scenes/r3d-validation-scene.r3dscene.json
 R3DStage Scene Show
 R3DStage Scene Hide
 R3DStage Scene Camera portrait
 R3DStage Scene Play character Wave
 ```
 
-Path loading must load JSON text with XHR, parse strict JSON, validate it, and delegate to the runtime. Handled load, parse, validation, or asset failures should resolve `false` and log diagnostics.
+Path loading must normalize backslashes to forward slashes, reject unsafe paths, load JSON text with XHR, parse strict JSON, validate it, and delegate to the runtime. Handled path validation, load, parse, validation, or asset failures should resolve `false` and log diagnostics.
 
 ## Acceptance Criteria
 
@@ -96,6 +96,7 @@ Path loading must load JSON text with XHR, parse strict JSON, validate it, and d
 - [ ] `R3DStage Scene Play <modelId> <clipName>` plays a model animation.
 - [ ] `R3DStage Character ...` is not routed as a supported command.
 - [ ] `load(path)` uses an MV-compatible `XMLHttpRequest` text loader, not `fetch`.
+- [ ] `load(path)` normalizes backslashes and rejects empty paths, absolute paths, drive-letter paths, `file://` URLs, remote URLs, protocol-relative URLs, and parent-directory traversal.
 - [ ] Scene file load failure, JSON parse failure, validation failure, and asset-load failure are logged distinctly.
 - [ ] Auto-load uses scene config and calls scene path loading.
 - [ ] MV `ok` input demo behavior is removed.

@@ -28,8 +28,8 @@ Make the default validation path exercise **R3D Scene File** loading instead of 
 
 ### In
 
-- Generate `public/scenes/r3d-validation-scene.r3dscene.json`.
-- Keep generating `public/models/r3d-validation-character.glb`.
+- Generate `public/r3d/scenes/r3d-validation-scene.r3dscene.json`.
+- Keep generating `public/r3d/models/r3d-validation-character.glb`.
 - Validate the generated scene definition using the Slice 01 validator.
 - Ensure the validation scene exercises cameras, lights, one GLB model, fit, and initial animation.
 
@@ -43,22 +43,22 @@ Make the default validation path exercise **R3D Scene File** loading instead of 
 ## Design References
 
 - Requirements: REQ-03, REQ-04
-- Decisions: `.r3dscene.json`; strict JSON; default `scenes/` directory; project-root-relative paths; `cameras[] + activeCamera`; generated validation scene must include GLB and lights; model paths are MV project-root-relative
+- Decisions: `.r3dscene.json`; strict JSON; default `r3d/` namespace with `r3d/scenes/` and `r3d/models/`; normalized project-root-relative paths; path validation rejects empty, absolute, drive-letter, URL, protocol-relative, and parent-directory traversal; `cameras[] + activeCamera`; generated validation scene must include GLB and lights; model paths are MV project-root-relative
 - Invariants: default validation flow remains local-only and must not require repository-local MV runtime files
 - Completion Contract: OT-01, DOC-04
-- Canonical docs: `../presentation-scene-runtime-design.md`, `../../../../scripts/generate-validation-asset.mjs`, `../../../../public/models/r3d-validation-character.glb`
+- Canonical docs: `../presentation-scene-runtime-design.md`, `../../../../scripts/generate-validation-asset.mjs`, `../../../../public/r3d/models/r3d-validation-character.glb`
 
 ## Code Context
 
-`scripts/generate-validation-asset.mjs` currently writes only `public/models/r3d-validation-character.glb`. The generated GLB has exact `Idle` and `Wave` animation clips. There is no generated `public/scenes/r3d-validation-scene.r3dscene.json` yet.
+`scripts/generate-validation-asset.mjs` currently writes only `public/models/r3d-validation-character.glb`. The generated GLB has exact `Idle` and `Wave` animation clips. There is no generated `public/r3d/scenes/r3d-validation-scene.r3dscene.json` yet.
 
 ## What To Build
 
 Extend the validation generation flow so the same command creates:
 
 ```text
-public/models/r3d-validation-character.glb
-public/scenes/r3d-validation-scene.r3dscene.json
+public/r3d/models/r3d-validation-character.glb
+public/r3d/scenes/r3d-validation-scene.r3dscene.json
 ```
 
 The generated scene should include:
@@ -69,25 +69,25 @@ The generated scene should include:
 - `activeCamera: "portrait"`
 - explicit hemisphere and directional lights with hex colors
 - `models` with one model using `id: "character"`
-- `path: "models/r3d-validation-character.glb"`
+- `path: "r3d/models/r3d-validation-character.glb"`
 - optional `fit` with `height: 2.4` and `origin: "center-bottom"`
 - initial animation `"Idle"`
 
 ## Acceptance Criteria
 
 - [ ] `npm run generate:validation-asset` produces the validation GLB and validation **R3D Scene File**.
-- [ ] Generated scene file path is `public/scenes/r3d-validation-scene.r3dscene.json`.
+- [ ] Generated scene file path is `public/r3d/scenes/r3d-validation-scene.r3dscene.json`.
 - [ ] Generated scene JSON is stable, readable, strict JSON.
 - [ ] Generated scene passes the Slice 01 validator.
 - [ ] Generated scene uses `cameras[] + activeCamera`.
 - [ ] Generated scene declares lights explicitly.
-- [ ] Generated scene references `models/r3d-validation-character.glb`.
+- [ ] Generated scene references `r3d/models/r3d-validation-character.glb`.
 - [ ] Generated scene uses model ID `character` and initial animation `Idle`.
 - [ ] Existing GLB generation behavior remains intact.
 
 ## Implementation Notes
 
-Prefer generating the scene JSON next to the GLB in the existing validation script unless the file becomes large enough to justify a separate generator. Create `public/scenes/` recursively.
+Prefer generating the scene JSON next to the GLB in the existing validation script unless the file becomes large enough to justify a separate generator. Create `public/r3d/scenes/` and `public/r3d/models/` recursively.
 
 The model path in the scene JSON must be relative to the MV project root after copy, not relative to the repository file location.
 

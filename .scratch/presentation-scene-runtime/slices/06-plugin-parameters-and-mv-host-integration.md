@@ -41,12 +41,12 @@ Migrate plugin parameters, plugin help text, and local MV host scripts from char
 - No preservation of old character parameter names as compatibility aliases.
 - No external issue publication.
 - No fullscreen layout support.
-- No change to the default `scenes/` directory decision.
+- No change to the default `r3d/` namespace decision.
 
 ## Design References
 
 - Requirements: REQ-03, REQ-04, REQ-08
-- Decisions: `Default Scene Path`; `Auto Show Scene`; `Stage Placement = right`; `Stage Width = 280`; default **R3D Scene File** directory is `scenes/`; old Character API/commands/parameters are explicitly removed
+- Decisions: `Default Scene Path`; `Auto Show Scene`; `Stage Placement = right`; `Stage Width = 280`; default **R3D Scene File** namespace is `r3d/` with `r3d/scenes/` and `r3d/models/`; old Character API/commands/parameters are explicitly removed
 - Invariants: default validation flow is local-only; Vite target remains MV-compatible; Visual Stage must not block pointer input
 - Completion Contract: OT-01, DOC-02, DOC-04
 - Canonical docs: `../presentation-scene-runtime-design.md`, `../../../../src/config.ts`, `../../../../src/mv-plugin-header.js`, `../../../../scripts/copy-to-mv-host.mjs`, `../../../../scripts/enable-mv-test-host.mjs`, `../../../../package.json`
@@ -59,16 +59,17 @@ Migrate plugin parameters, plugin help text, and local MV host scripts from char
 
 Replace config and plugin metadata with scene-oriented names:
 
-- `Default Scene Path`, default `scenes/r3d-validation-scene.r3dscene.json`
+- `Default Scene Path`, default `r3d/scenes/r3d-validation-scene.r3dscene.json`
 - `Auto Show Scene`, default `true`
 - `Stage Placement`, default `right`
 - `Stage Width`, default `280`
 - existing target FPS, max pixel ratio, and logging params remain
 
-Update scripts so the generated scene JSON is copied to:
+Update scripts so the generated scene JSON and validation model are copied to:
 
 ```text
-<MV project>/scenes/r3d-validation-scene.r3dscene.json
+<MV project>/r3d/scenes/r3d-validation-scene.r3dscene.json
+<MV project>/r3d/models/r3d-validation-character.glb
 ```
 
 and `enable:mv-test-host` writes the new parameters to `js/plugins.js`.
@@ -78,10 +79,11 @@ and `enable:mv-test-host` writes the new parameters to `js/plugins.js`.
 - [ ] Config type and parser use scene-oriented names.
 - [ ] Old character parameter names are not preserved as compatibility aliases.
 - [ ] Plugin header documents scene-oriented parameters and Scene commands only.
-- [ ] `Default Scene Path` default is `scenes/r3d-validation-scene.r3dscene.json`.
+- [ ] `Default Scene Path` default is `r3d/scenes/r3d-validation-scene.r3dscene.json`.
 - [ ] `Stage Placement` accepts only `right` or falls back to `right` with diagnostics.
-- [ ] Copy script installs the generated scene JSON into `<MV project>/scenes/`.
-- [ ] Enable script writes scene-oriented plugin parameters and copies the scene JSON.
+- [ ] Copy script installs the generated scene JSON into `<MV project>/r3d/scenes/`.
+- [ ] Copy script installs the generated validation model into `<MV project>/r3d/models/`.
+- [ ] Enable script writes scene-oriented plugin parameters and copies the scene JSON and validation model.
 - [ ] Script error messages reference the current scene-centered documentation path when available.
 - [ ] `package.json` formatting command includes current docs and source/script paths.
 

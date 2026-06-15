@@ -162,9 +162,13 @@ The right-side **Visual Stage** layout remains the only implemented layout. Layo
 - `fit.origin` supports `center` and `center-bottom`.
 - First-version model `scale` is an optional positive finite number for uniform scale only; non-uniform vector scale is out of scope.
 - The default startup path uses `Default Scene Path` and generated validation scene JSON.
-- First-version **R3D Scene File** paths and model asset paths are RPG Maker MV project-root-relative paths, including model paths inside definitions passed to `loadDefinition(definition)`.
+- The default and recommended R3D resource namespace is `r3d/`, with default scene files under `r3d/scenes/` and default model files under `r3d/models/`.
+- First-version **R3D Scene File** paths and model asset paths are normalized RPG Maker MV project-root-relative paths, including model paths inside definitions passed to `loadDefinition(definition)`.
+- First-version path normalization converts backslashes to forward slashes before validation and loading.
+- First-version path validation rejects empty paths, absolute paths, drive-letter paths, `file://` URLs, remote URLs, protocol-relative URLs, and parent-directory traversal.
 - First-version **R3D Scene Files** do not support scene-file-relative asset paths or an `assetBasePath` field.
-- The default **R3D Scene File** directory is `scenes/`, not RPG Maker MV's `data/` database directory.
+- The default `r3d/` namespace is a recommendation, not a runtime whitelist; users may load other project-root-relative paths that pass path validation.
+- **R3D Scene Files** do not live under RPG Maker MV's `data/` database directory by default.
 - **Visual Stage** visibility is separate from active **Presentation Scene** lifetime: `hide()` hides the canvas without disposing the active scene, `show()` reveals the current active scene, and successful scene loads automatically show the canvas.
 - Failed or stale scene loads never change **Visual Stage** visibility.
 - `dispose()` is a terminal runtime lifecycle operation. Repeated `dispose()` calls are no-ops; other API calls after disposal fail or no-op with diagnostics.
@@ -263,7 +267,7 @@ The first-version **Presentation Scene Definition** shape is intentionally flat:
   "models": [
     {
       "id": "character",
-      "path": "models/r3d-validation-character.glb",
+      "path": "r3d/models/r3d-validation-character.glb",
       "position": [0, 0, 0],
       "rotation": [0, -0.2, 0],
       "scale": 1,
@@ -279,7 +283,7 @@ The first-version **Presentation Scene Definition** shape is intentionally flat:
 
 The schema shown here is authoritative for design intent but not a full JSON Schema artifact. First-version validation is implemented as a TypeScript runtime validator, and no `.schema.json` artifact is produced in this change. The validator is the executable source of truth for runtime acceptance. Validation diagnostics should be structured enough to support future editor tooling, including a path, message, and reason where practical. Implementation agents may refine TypeScript type names and validator internals without changing behavior.
 
-All `path` values in first-version scene definitions are RPG Maker MV project-root-relative paths. A model path such as `models/r3d-validation-character.glb` resolves the same way whether the definition came from `scene.load("scenes/example.r3dscene.json")` or `scene.loadDefinition(definition)`. Scene-file-relative model paths, `assetBasePath`, and package-relative asset resolution are deferred. The default **R3D Scene File** location remains `scenes/` because scene files are plugin-owned Visual Stage authoring assets, not RPG Maker MV database records under `data/`.
+All `path` values in first-version scene definitions are normalized RPG Maker MV project-root-relative paths. A model path such as `r3d/models/r3d-validation-character.glb` resolves the same way whether the definition came from `scene.load("r3d/scenes/example.r3dscene.json")` or `scene.loadDefinition(definition)`. Backslashes are normalized to forward slashes before validation and loading. Empty paths, absolute paths, drive-letter paths, `file://` URLs, remote URLs, protocol-relative URLs, and parent-directory traversal are rejected. Scene-file-relative model paths, `assetBasePath`, and package-relative asset resolution are deferred. The default **R3D Scene File** location is `r3d/scenes/` because scene files are plugin-owned Visual Stage authoring assets, not RPG Maker MV database records under `data/`.
 
 First-version **Presentation Cameras** are perspective cameras. A camera entry supports `id`, `position`, `target`, `fov`, and optional `near`/`far`. Missing `near` defaults to `0.1`; missing `far` defaults to `100`. The schema does not require `type`; missing `type` means perspective. If `type` is present in first-version files, only `"perspective"` is accepted. Orthographic cameras and camera-type-specific schema branches are deferred.
 
@@ -330,7 +334,7 @@ The plugin's default user-visible behavior changes from "show a character from a
 The MV plugin command surface becomes:
 
 ```text
-R3DStage Scene Load scenes/r3d-validation-scene.r3dscene.json
+R3DStage Scene Load r3d/scenes/r3d-validation-scene.r3dscene.json
 R3DStage Scene Show
 R3DStage Scene Hide
 R3DStage Scene Camera portrait
@@ -375,7 +379,7 @@ Successful `load` and `loadDefinition` calls automatically show the **Visual Sta
 
 Plugin parameters become scene-oriented:
 
-- `Default Scene Path`, default `scenes/r3d-validation-scene.r3dscene.json`
+- `Default Scene Path`, default `r3d/scenes/r3d-validation-scene.r3dscene.json`
 - `Auto Show Scene`, default `true`
 - `Stage Placement`, default `right`
 - `Stage Width`, default `280`
@@ -389,12 +393,12 @@ Plugin parameters become scene-oriented:
 
 ### Side Effects / Integrations
 
-Local MV test-host scripts must copy the generated `.r3dscene.json` file into `<MV project>/scenes/` in addition to copying the plugin and validation GLB. The enable script must write scene-oriented plugin parameters into `<MV project>/js/plugins.js`.
+Local MV test-host scripts must copy the generated `.r3dscene.json` file into `<MV project>/r3d/scenes/` in addition to copying the plugin and validation GLB into `<MV project>/r3d/models/`. The enable script must write scene-oriented plugin parameters into `<MV project>/js/plugins.js`.
 
 The validation generation flow must produce:
 
-- `public/models/r3d-validation-character.glb`
-- `public/scenes/r3d-validation-scene.r3dscene.json`
+- `public/r3d/models/r3d-validation-character.glb`
+- `public/r3d/scenes/r3d-validation-scene.r3dscene.json`
 
 ### Execution / Concurrency Semantics
 
@@ -432,7 +436,7 @@ Three.js 0.184.0 `Group` is a semantic `Object3D` container. It is appropriate f
 
 `BufferGeometry.dispose()`, `Material.dispose()`, and `Texture.dispose()` dispatch dispose events consumed by the renderer. Material disposal does not automatically dispose textures referenced by the material. `GLTFLoader` may use `ImageBitmapLoader`, whose image bitmaps require explicit close handling beyond normal JavaScript garbage collection. `WebGLRenderer.dispose()` releases renderer-owned GPU resources and removes context listeners, so it should only run when the plugin is no longer used, not on every scene switch.
 
-RPG Maker MV core scripts load database JSON with `DataManager.loadDataFile`, which uses `XMLHttpRequest`, `overrideMimeType('application/json')`, `JSON.parse(xhr.responseText)`, and project-local paths under `data/`. **R3D Scene File** loading follows the same conservative browser-era loading style for JSON text, while keeping GLB/glTF asset loading on Three.js `GLTFLoader`. This does not make R3D scene files part of the MV database; they remain under the plugin-owned `scenes/` directory by default.
+RPG Maker MV core scripts load database JSON with `DataManager.loadDataFile`, which uses `XMLHttpRequest`, `overrideMimeType('application/json')`, `JSON.parse(xhr.responseText)`, and project-local paths under `data/`. **R3D Scene File** loading follows the same conservative browser-era loading style for JSON text, while keeping GLB/glTF asset loading on Three.js `GLTFLoader`. This does not make R3D scene files part of the MV database; they remain under the plugin-owned `r3d/scenes/` directory by default.
 
 ### Rollout / Migration / Cleanup
 
@@ -445,7 +449,7 @@ The old `docs/r3d-character-display.md` should be replaced or superseded by scen
 | Phase | Goal | Depends On | Requirements | Success Criteria | Slice Candidates |
 | --- | --- | --- | --- | --- | --- |
 | 1 | Establish the first-version **Presentation Scene Definition** contract and runtime validator. | None | REQ-04, REQ-05 | Types, validation behavior, and test infrastructure exist; invalid definitions fail before runtime mutation. | Slice 01: Scene Definition Contract And Validation |
-| 2 | Generate a default validation **R3D Scene File** that exercises the schema. | Phase 1 | REQ-03, REQ-04 | `public/scenes/r3d-validation-scene.r3dscene.json` is generated and validates against schema v1. | Slice 02: Validation Scene Asset Flow |
+| 2 | Generate a default validation **R3D Scene File** that exercises the schema. | Phase 1 | REQ-03, REQ-04 | `public/r3d/scenes/r3d-validation-scene.r3dscene.json` is generated and validates against schema v1. | Slice 02: Validation Scene Asset Flow |
 | 3 | Extract reusable Three.js scene build, fit, animation lookup, and disposal helpers. | Phase 1 | REQ-05, REQ-07, REQ-09 | Resource disposal, ImageBitmap cleanup, exact clip lookup, and model fit behavior are tested before runtime integration. | Slice 03: Scene Resource Disposal And Build Helpers |
 | 4 | Build the long-lived **Visual Stage** runtime and transactional active-scene switching from in-memory definitions. | Phases 1, 3 | REQ-05, REQ-06, REQ-07, REQ-08, REQ-09 | Renderer/canvas/scene are reused; active root and active **Presentation Camera** state swap atomically; resources are explicitly disposed. | Slice 04: Visual Stage Runtime Core |
 | 5 | Replace public control with scene-oriented API, MV commands, and path-based **R3D Scene File** loading. | Phase 4 | REQ-01, REQ-02, REQ-03 | `window.R3DVisualStage.scene` and `R3DStage Scene ...` work; XHR scene file loading works; old `character` API and `R3DStage Character ...` commands are removed. | Slice 05: Scene Path Loading And Public Control Surface |
@@ -456,7 +460,7 @@ The old `docs/r3d-character-display.md` should be replaced or superseded by scen
 
 ### Observable Truths
 
-- [ ] OT-01: With default plugin parameters, enabling `R3DVisualStage` in an MV test host loads `scenes/r3d-validation-scene.r3dscene.json` and renders the validation character on the right side of the MV canvas.
+- [ ] OT-01: With default plugin parameters, enabling `R3DVisualStage` in an MV test host loads `r3d/scenes/r3d-validation-scene.r3dscene.json` and renders the validation character on the right side of the MV canvas.
 - [ ] OT-02: `R3DStage Scene Play character Wave` plays the validation character's `Wave` animation without blocking MV gameplay.
 - [ ] OT-03: `R3DStage Scene Camera portrait` switches to the named **Presentation Camera** without blocking MV gameplay.
 - [ ] OT-04: Loading an invalid **R3D Scene File** logs a useful error and leaves the previous active scene and active **Presentation Camera** visible.
