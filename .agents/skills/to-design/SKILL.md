@@ -18,12 +18,16 @@ instead of asking the user. Only ask when a decision is genuinely unresolved.
 2. Determine or confirm the `change-slug`. The design file must live at
    `.scratch/<change-slug>/<change-slug>-design.md`.
 3. Identify which conditional design modules apply for this change.
-4. Write or update the design using the template below. If the file already
+4. Identify the testing seams for the change from the local PRD if present, or
+   from the current conversation and codebase context otherwise. Prefer
+   existing high-level seams over new ones. If a proposed seam is not viable,
+   record why and choose the highest practical alternative.
+5. Write or update the design using the template below. If the file already
    exists, update it in place instead of creating a parallel version.
-5. Self-review the document for missing decisions, stale terminology, internal
+6. Self-review the document for missing decisions, stale terminology, internal
    contradictions, unsupported assumptions, and incomplete `Completion
    Contract`.
-6. Report the path to the written design and the recommended next skill.
+7. Report the path to the written design and the recommended next skill.
 
 ## Design Template
 
@@ -193,6 +197,16 @@ Reserved for `to-slices`. Do not fill this section in `to-design`.
 
 Behavior, boundary, integration, failure-path, and regression tests required
 for this change.
+
+Include:
+
+- The highest practical seams where the change should be tested
+- Existing seams or prior tests that should be reused
+- New seams required by the design, with justification
+- Behavior and boundary cases that must be covered
+- Integration or failure-path tests required by external systems, persistence,
+  concurrency, security, or migrations
+- What should deliberately not be tested at this layer
 
 ## Deferred Ideas
 

@@ -17,9 +17,14 @@ is still unclear after checking the conversation and repository context.
    PRD, and respect any ADRs in the area you're touching.
 2. Determine the `change-slug` and target path. The file must live at
    `.scratch/<change-slug>/<change-slug>-prd.md`.
-3. Write or update the PRD using the template below. If the file already
+3. Sketch out the seams at which you're going to test the feature. Existing
+   seams should be preferred to new ones. Use the highest seam possible. If new
+   seams are needed, propose them at the highest point you can.
+
+   Check with the user that these seams match their expectations.
+4. Write or update the PRD using the template below. If the file already
    exists, read it first and preserve still-valid content.
-4. Do not publish to an issue tracker and do not apply any triage label. This
+5. Do not publish to an issue tracker and do not apply any triage label. This
    artifact is local and optional.
 
 <prd-template>
@@ -74,6 +79,7 @@ A list of testing decisions that were made. Include:
 
 - A description of what makes a good test (only test external behavior, not
   implementation details)
+- The highest practical seams where the feature should be tested
 - Which modules will be tested
 - Prior art for the tests (i.e. similar types of tests in the codebase)
 
@@ -94,4 +100,3 @@ Any further notes about the feature.
 - Keep the PRD at the level of user, domain, and product intent.
 - Leave implementation authority to `to-design`.
 - Use concise, decision-rich prose rather than filler.
-
