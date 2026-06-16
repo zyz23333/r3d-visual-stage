@@ -50,10 +50,7 @@ function sceneDefinition(overrides: Record<string, unknown> = {}): Record<string
 function createBoxModel(): LoadedPresentationModel {
   return {
     scene: new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshBasicMaterial()),
-    animations: [
-      new THREE.AnimationClip('Idle', 1, []),
-      new THREE.AnimationClip('Wave', 1, []),
-    ],
+    animations: [new THREE.AnimationClip('Idle', 1, []), new THREE.AnimationClip('Wave', 1, [])],
   };
 }
 

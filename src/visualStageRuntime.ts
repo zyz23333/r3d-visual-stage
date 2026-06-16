@@ -116,11 +116,25 @@ export class VisualStageRuntime {
       new DomLayer(this.renderer.domElement, config);
   }
 
-  public async loadDefinition(definition: unknown): Promise<boolean> {
-    const token = ++this.loadToken;
+  public reserveLoadToken(): number {
+    this.loadToken += 1;
+    return this.loadToken;
+  }
+
+  public isLoadTokenCurrent(token: number): boolean {
+    return token === this.loadToken;
+  }
+
+  public async loadDefinition(definition: unknown, reservedLoadToken?: number): Promise<boolean> {
+    const token = reservedLoadToken ?? this.reserveLoadToken();
 
     if (this.disposed) {
       logWarning('Scene load ignored because the Visual Stage runtime is disposed.');
+      return false;
+    }
+
+    if (!this.isLoadTokenCurrent(token)) {
+      logWarning('Scene definition load ignored because it is stale.');
       return false;
     }
 
@@ -150,7 +164,7 @@ export class VisualStageRuntime {
       return false;
     }
 
-    if (this.disposed || token !== this.loadToken) {
+    if (this.disposed || !this.isLoadTokenCurrent(token)) {
       this.disposeScene(pending);
       logWarning(`Scene load completed stale and was discarded: ${validation.definition.id}`);
       return false;

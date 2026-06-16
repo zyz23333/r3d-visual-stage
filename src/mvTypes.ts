@@ -46,13 +46,15 @@ declare global {
 }
 
 export interface R3DVisualStageApi {
-  character: R3DVisualStageCharacterApi;
+  scene: R3DVisualStageSceneApi;
   dispose(): void;
 }
 
-export interface R3DVisualStageCharacterApi {
+export interface R3DVisualStageSceneApi {
+  load(path: string): Promise<boolean>;
+  loadDefinition(definition: unknown): Promise<boolean>;
   show(): void;
   hide(): void;
-  load(path: string): Promise<void>;
-  play(clipName: string): boolean;
+  setCamera(cameraId: string): boolean;
+  play(modelId: string, clipName: string): boolean;
 }

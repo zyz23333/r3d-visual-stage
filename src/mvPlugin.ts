@@ -1,40 +1,46 @@
-import { readCharacterDisplayConfig } from './config';
+import { readVisualStageConfig, type VisualStagePluginConfig } from './config';
 import { installFileLogger } from './fileLogger';
-import { logInfo, logWarning } from './diagnostics';
-import { CharacterDisplay } from './characterDisplay';
+import { logError, logInfo, logWarning } from './diagnostics';
 import type { R3DVisualStageApi } from './mvTypes';
+import {
+  createR3DVisualStageSceneApi,
+  type PresentationSceneRuntimeControl,
+  type SceneFileTextLoader,
+} from './sceneControl';
+import { VisualStageRuntime } from './visualStageRuntime';
 
 const PLUGIN_NAME = 'R3DVisualStage';
 const COMMAND_PREFIX = 'R3DStage';
 
-export function installR3DVisualStage(): void {
+export interface R3DVisualStageInstallDependencies {
+  createRuntime?: (config: VisualStagePluginConfig) => PresentationSceneRuntimeControl;
+  sceneFileTextLoader?: SceneFileTextLoader;
+}
+
+export function installR3DVisualStage(dependencies: R3DVisualStageInstallDependencies = {}): void {
   const parameters = window.PluginManager?.parameters(PLUGIN_NAME) ?? {};
-  const config = readCharacterDisplayConfig(parameters);
+  const config = readVisualStageConfig(parameters);
   installFileLogger(config);
 
-  const characterDisplay = new CharacterDisplay(config);
+  const runtime = dependencies.createRuntime?.(config) ?? new VisualStageRuntime(config);
+  const sceneApi = createR3DVisualStageSceneApi(runtime, dependencies.sceneFileTextLoader);
   const api: R3DVisualStageApi = {
-    character: {
-      show: () => characterDisplay.show(),
-      hide: () => characterDisplay.hide(),
-      load: (path) => characterDisplay.load(path),
-      play: (clipName) => characterDisplay.play(clipName),
-    },
-    dispose: () => characterDisplay.dispose(),
+    scene: sceneApi,
+    dispose: () => runtime.dispose(),
   };
 
   window.R3DVisualStage = api;
-  installPluginCommandRoute(characterDisplay);
-  installSceneUpdateHook(characterDisplay);
+  installPluginCommandRoute(sceneApi);
+  installSceneUpdateHook(runtime);
 
-  if (config.autoShowCharacter) {
-    characterDisplay.show();
+  if (config.autoShowScene) {
+    loadSceneFromMvSurface(sceneApi, config.defaultScenePath, 'auto-load');
   }
 
   logInfo('Plugin installed.');
 }
 
-function installPluginCommandRoute(characterDisplay: CharacterDisplay): void {
+function installPluginCommandRoute(sceneApi: R3DVisualStageApi['scene']): void {
   const gameInterpreter = window.Game_Interpreter;
   if (!gameInterpreter) {
     logWarning('Game_Interpreter was not available; plugin commands were not installed.');
@@ -53,55 +59,72 @@ function installPluginCommandRoute(characterDisplay: CharacterDisplay): void {
     }
 
     const [commandDomain = '', subCommand = '', ...rest] = args;
-    routePluginCommand(characterDisplay, commandDomain, subCommand, rest);
+    routePluginCommand(sceneApi, commandDomain, subCommand, rest);
   };
 }
 
 function routePluginCommand(
-  characterDisplay: CharacterDisplay,
+  sceneApi: R3DVisualStageApi['scene'],
   commandDomain: string,
   subCommand: string,
   args: string[],
 ): void {
-  if (commandDomain.toLowerCase() !== 'character') {
+  if (commandDomain.toLowerCase() !== 'scene') {
     logWarning(`Unknown R3DStage command domain: ${commandDomain}`);
     return;
   }
 
-  switch (subCommand.toLowerCase()) {
-    case 'show':
-      characterDisplay.show();
-      break;
-    case 'hide':
-      characterDisplay.hide();
-      break;
-    case 'load':
-      void characterDisplay.load(args.join(' '));
-      break;
-    case 'play':
-      characterDisplay.play(args.join(' '));
-      break;
-    default:
-      logWarning(`Unknown plugin command: ${subCommand}`);
-      break;
+  try {
+    switch (subCommand.toLowerCase()) {
+      case 'show':
+        sceneApi.show();
+        break;
+      case 'hide':
+        sceneApi.hide();
+        break;
+      case 'load':
+        loadSceneFromMvSurface(sceneApi, args.join(' '), 'plugin-command');
+        break;
+      case 'camera':
+        sceneApi.setCamera(args.join(' '));
+        break;
+      case 'play':
+        routeScenePlayCommand(sceneApi, args);
+        break;
+      default:
+        logWarning(`Unknown plugin command: ${subCommand}`);
+        break;
+    }
+  } catch (error) {
+    logError(`R3DStage Scene command failed: ${subCommand}`, error);
   }
 }
 
-function installSceneUpdateHook(characterDisplay: CharacterDisplay): void {
+function routeScenePlayCommand(sceneApi: R3DVisualStageApi['scene'], args: string[]): void {
+  const [modelId = '', ...clipNameParts] = args;
+  sceneApi.play(modelId, clipNameParts.join(' '));
+}
+
+function loadSceneFromMvSurface(
+  sceneApi: R3DVisualStageApi['scene'],
+  path: string,
+  source: string,
+): void {
+  sceneApi.load(path).catch((error: unknown) => {
+    logError(`R3DStage Scene Load failed unexpectedly from ${source}.`, error);
+  });
+}
+
+function installSceneUpdateHook(runtime: Pick<PresentationSceneRuntimeControl, 'update'>): void {
   const sceneManager = window.SceneManager;
   if (!sceneManager) {
-    logWarning('SceneManager was not available; character display updates were not installed.');
+    logWarning('SceneManager was not available; Visual Stage updates were not installed.');
     return;
   }
 
   const originalUpdateMain = sceneManager.updateMain;
   sceneManager.updateMain = function updateMain() {
     originalUpdateMain.call(this);
-
-    if (window.Input?.isTriggered('ok')) {
-      characterDisplay.reactToOkInput();
-    }
-
-    characterDisplay.update(performance.now());
+    runtime.update(performance.now());
   };
 }

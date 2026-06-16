@@ -1,11 +1,16 @@
-import type { CharacterDisplayConfig } from './config';
+import type { VisualStagePluginConfig } from './config';
 
 type FsModule = typeof import('node:fs');
 type PathModule = typeof import('node:path');
 
 let fileLogger: FileLogger | undefined;
 
-export function installFileLogger(config: CharacterDisplayConfig): void {
+type FileLoggerConfig = Pick<
+  VisualStagePluginConfig,
+  'fileLogging' | 'logFilePath' | 'timestampLogFile'
+>;
+
+export function installFileLogger(config: FileLoggerConfig): void {
   if (!config.fileLogging) {
     return;
   }
