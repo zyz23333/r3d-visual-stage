@@ -5,7 +5,8 @@ Stage** Presentation Scene runtime for RPG Maker MV.
 
 R3D Visual Stage renders a transparent, right-side **Visual Stage** with
 Three.js while RPG Maker MV's 2D tilemap remains authoritative for movement,
-events, collision, menus, and game state.
+events, collision, menus, and game state. The default validation content is a
+**3D Character Display** expressed through a **Presentation Scene**.
 
 ## Requirements
 
@@ -37,11 +38,11 @@ The build writes:
 - `public/r3d/models/r3d-validation-character.glb`
 - `public/r3d/scenes/r3d-validation-scene.r3dscene.json`
 
-The generated validation scene is a default **Presentation Scene** example. It
-loads a lightweight local validation character with `Idle` and `Wave` animation
-clips. It is only meant to verify the scene loading, rendering, command, and
-animation paths. Replace it with real redistributable GLB/glTF assets when
-validating asset quality.
+The generated validation scene is a default **3D Character Display** example
+implemented as a **Presentation Scene**. It loads a lightweight local validation
+character with `Idle` and `Wave` animation clips. It is only meant to verify the
+scene loading, rendering, command, and animation paths. Replace it with real
+redistributable GLB/glTF assets when validating asset quality.
 
 ## Copy Into A Local MV Test Host
 

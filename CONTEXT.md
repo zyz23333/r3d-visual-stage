@@ -54,12 +54,12 @@ _Avoid_: placeholder model, final production character, VRM baseline
 
 ## Relationships
 
-- A **3D Character Display** is displayed over or beside the **2D Tilemap**.
+- A **3D Character Display** is a first-class product use case that may be expressed through a **Presentation Scene**.
 - A **Presentation Scene Definition** describes one **Presentation Scene**.
 - A **Presentation Scene** may define one or more **Presentation Cameras**.
 - One **Presentation Camera** is active for rendering a **Presentation Scene** at a time.
 - An **R3D Scene File** stores one **Presentation Scene Definition**.
-- A **Visual Stage** may contain a **3D Character Display** or a **Presentation Scene**.
+- A **Visual Stage** may present a **3D Character Display** or a broader **Presentation Scene**.
 - **R3D Visual Stage** provides the **Visual Stage** for the **RPG Maker MV Target**.
 - A **Presentation Scene** may include a **3D Character Display**, props, lighting, camera movement, and animation timing.
 - The **2D Tilemap** remains authoritative for player movement, events, collision, and object interaction.
