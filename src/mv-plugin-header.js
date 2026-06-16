@@ -4,7 +4,7 @@
  *
  * @param Default Character Path
  * @type string
- * @default models/r3d-validation-character.glb
+ * @default r3d/models/r3d-validation-character.glb
  * @desc GLB/glTF asset path relative to the RPG Maker MV project root.
  *
  * @param Auto Show Character
@@ -59,7 +59,7 @@
  *
  *   R3DStage Character Show
  *   R3DStage Character Hide
- *   R3DStage Character Load models/r3d-validation-character.glb
+ *   R3DStage Character Load r3d/models/r3d-validation-character.glb
  *   R3DStage Character Play Idle
  *   R3DStage Character Play Wave
  *

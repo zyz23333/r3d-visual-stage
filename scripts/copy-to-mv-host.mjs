@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 const configPath = resolve('.r3d-local.json');
 const pluginSource = resolve('dist/R3DVisualStage.js');
 const sourceMapSource = resolve('dist/R3DVisualStage.js.map');
-const modelSource = resolve('public/models/r3d-validation-character.glb');
+const modelSource = resolve('public/r3d/models/r3d-validation-character.glb');
 
 let config;
 try {
@@ -22,7 +22,7 @@ if (!config.mvProjectPath || typeof config.mvProjectPath !== 'string') {
 
 const mvProjectPath = resolve(config.mvProjectPath);
 const pluginTargetDir = resolve(mvProjectPath, 'js/plugins');
-const modelTargetDir = resolve(mvProjectPath, 'models');
+const modelTargetDir = resolve(mvProjectPath, 'r3d/models');
 
 await mkdir(pluginTargetDir, { recursive: true });
 await mkdir(modelTargetDir, { recursive: true });

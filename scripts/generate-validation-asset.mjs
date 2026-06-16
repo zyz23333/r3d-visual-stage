@@ -1,12 +1,61 @@
-import { mkdir, writeFile } from 'node:fs/promises';
+import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 
 import * as THREE from 'three';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
+import ts from 'typescript';
 
 installNodeFileReader();
 
-const outputPath = resolve('public/models/r3d-validation-character.glb');
+const modelOutputPath = resolve('public/r3d/models/r3d-validation-character.glb');
+const sceneOutputPath = resolve('public/r3d/scenes/r3d-validation-scene.r3dscene.json');
+const validationSceneDefinition = {
+  schemaVersion: 1,
+  id: 'r3d-validation-scene',
+  cameras: [
+    {
+      id: 'portrait',
+      position: [0, 1.35, 4.5],
+      target: [0, 1.1, 0],
+      fov: 30,
+      near: 0.1,
+      far: 100,
+    },
+  ],
+  activeCamera: 'portrait',
+  lights: [
+    {
+      id: 'hemi',
+      type: 'hemisphere',
+      skyColor: '#ffffff',
+      groundColor: '#404050',
+      intensity: 2.4,
+    },
+    {
+      id: 'key',
+      type: 'directional',
+      color: '#fff',
+      intensity: 2.8,
+      position: [2, 4, 4],
+    },
+  ],
+  models: [
+    {
+      id: 'character',
+      path: 'r3d/models/r3d-validation-character.glb',
+      position: [0, 0, 0],
+      rotation: [0, -0.2, 0],
+      scale: 1,
+      fit: {
+        height: 2.4,
+        origin: 'center-bottom',
+      },
+      animation: 'Idle',
+    },
+  ],
+};
+
+await validateSceneDefinition(validationSceneDefinition);
 
 const root = new THREE.Group();
 root.name = 'R3D_ValidationCharacter';
@@ -74,12 +123,18 @@ const waveClip = new THREE.AnimationClip('Wave', 1.4, [
   ),
 ]);
 
-await mkdir(dirname(outputPath), { recursive: true });
 const exporter = new GLTFExporter();
 const arrayBuffer = await parseGlb(exporter, root, [idleClip, waveClip]);
+const glb = Buffer.from(arrayBuffer);
+const sceneJson = `${JSON.stringify(validationSceneDefinition, null, 2)}\n`;
 
-await writeFile(outputPath, Buffer.from(arrayBuffer));
-console.log(`Generated ${outputPath}`);
+await mkdir(dirname(modelOutputPath), { recursive: true });
+await mkdir(dirname(sceneOutputPath), { recursive: true });
+
+await writeFile(modelOutputPath, glb);
+await writeFile(sceneOutputPath, sceneJson, 'utf8');
+console.log(`Generated ${modelOutputPath}`);
+console.log(`Generated ${sceneOutputPath}`);
 
 function createArm(name, x, material) {
   const arm = new THREE.Group();
@@ -109,6 +164,31 @@ function parseGlb(exporter, rootObject, animations) {
       trs: false,
     });
   });
+}
+
+async function validateSceneDefinition(definition) {
+  const sourcePath = resolve('src/presentationSceneDefinition.ts');
+  const source = await readFile(sourcePath, 'utf8');
+  // Keep the generated asset script independent from the app build while reusing the validator.
+  const { outputText } = ts.transpileModule(source, {
+    compilerOptions: {
+      module: ts.ModuleKind.ES2022,
+      target: ts.ScriptTarget.ES2022,
+      verbatimModuleSyntax: true,
+    },
+    fileName: sourcePath,
+  });
+  const encodedModule = Buffer.from(outputText, 'utf8').toString('base64');
+  const moduleUrl = `data:text/javascript;base64,${encodedModule}`;
+  const { validatePresentationSceneDefinition } = await import(moduleUrl);
+  const result = validatePresentationSceneDefinition(definition);
+
+  if (!result.ok) {
+    const details = result.errors
+      .map((issue) => `${issue.path}: ${issue.message} (${issue.reason})`)
+      .join('\n');
+    throw new Error(`Generated validation scene is invalid:\n${details}`);
+  }
 }
 
 function installNodeFileReader() {

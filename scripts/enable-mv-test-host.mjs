@@ -5,14 +5,14 @@ const PLUGIN_NAME = 'R3DVisualStage';
 
 const pluginSource = resolve('dist/R3DVisualStage.js');
 const sourceMapSource = resolve('dist/R3DVisualStage.js.map');
-const modelSource = resolve('public/models/r3d-validation-character.glb');
+const modelSource = resolve('public/r3d/models/r3d-validation-character.glb');
 
 const pluginEntry = {
   name: PLUGIN_NAME,
   status: true,
   description: 'R3D Visual Stage character display for RPG Maker MV.',
   parameters: {
-    'Default Character Path': 'models/r3d-validation-character.glb',
+    'Default Character Path': 'r3d/models/r3d-validation-character.glb',
     'Auto Show Character': 'true',
     'Character Display Width': '280',
     'Target FPS': '30',
@@ -49,7 +49,7 @@ async function assertMvProject(mvProjectPath) {
 
 async function copyVisualStageFiles(mvProjectPath) {
   const pluginTargetDir = resolve(mvProjectPath, 'js/plugins');
-  const modelTargetDir = resolve(mvProjectPath, 'models');
+  const modelTargetDir = resolve(mvProjectPath, 'r3d/models');
 
   await mkdir(pluginTargetDir, { recursive: true });
   await mkdir(modelTargetDir, { recursive: true });

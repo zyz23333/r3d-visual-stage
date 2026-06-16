@@ -10,7 +10,7 @@ export interface CharacterDisplayConfig {
 }
 
 const DEFAULT_CONFIG: CharacterDisplayConfig = {
-  defaultCharacterPath: 'models/r3d-validation-character.glb',
+  defaultCharacterPath: 'r3d/models/r3d-validation-character.glb',
   autoShowCharacter: true,
   characterDisplayWidth: 280,
   targetFps: 30,

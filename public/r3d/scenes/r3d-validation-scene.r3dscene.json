@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "id": "r3d-validation-scene",
+  "cameras": [
+    {
+      "id": "portrait",
+      "position": [
+        0,
+        1.35,
+        4.5
+      ],
+      "target": [
+        0,
+        1.1,
+        0
+      ],
+      "fov": 30,
+      "near": 0.1,
+      "far": 100
+    }
+  ],
+  "activeCamera": "portrait",
+  "lights": [
+    {
+      "id": "hemi",
+      "type": "hemisphere",
+      "skyColor": "#ffffff",
+      "groundColor": "#404050",
+      "intensity": 2.4
+    },
+    {
+      "id": "key",
+      "type": "directional",
+      "color": "#fff",
+      "intensity": 2.8,
+      "position": [
+        2,
+        4,
+        4
+      ]
+    }
+  ],
+  "models": [
+    {
+      "id": "character",
+      "path": "r3d/models/r3d-validation-character.glb",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        -0.2,
+        0
+      ],
+      "scale": 1,
+      "fit": {
+        "height": 2.4,
+        "origin": "center-bottom"
+      },
+      "animation": "Idle"
+    }
+  ]
+}

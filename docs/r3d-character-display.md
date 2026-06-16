@@ -34,7 +34,7 @@ The build writes:
 
 - `dist/R3DVisualStage.js`
 - `dist/R3DVisualStage.js.map`
-- `public/models/r3d-validation-character.glb`
+- `public/r3d/models/r3d-validation-character.glb`
 
 The generated GLB is a lightweight local validation character with `Idle` and
 `Wave` animation clips. It is only meant to verify the loading, rendering, and
@@ -67,7 +67,7 @@ The script copies:
 
 - `dist/R3DVisualStage.js` to `<MV project>/js/plugins/`
 - `dist/R3DVisualStage.js.map` to `<MV project>/js/plugins/`
-- `public/models/r3d-validation-character.glb` to `<MV project>/models/`
+- `public/r3d/models/r3d-validation-character.glb` to `<MV project>/r3d/models/`
 
 Enable `R3DVisualStage` in RPG Maker MV's Plugin Manager.
 
@@ -115,7 +115,7 @@ HOST=127.0.0.1 PORT=8081 npm run serve:mv
 
 ## Plugin Parameters
 
-- `Default Character Path`: default `models/r3d-validation-character.glb`
+- `Default Character Path`: default `r3d/models/r3d-validation-character.glb`
 - `Auto Show Character`: default `true`
 - `Character Display Width`: default `280`
 - `Target FPS`: default `30`
@@ -144,7 +144,7 @@ RPG Maker MV plugin commands:
 ```text
 R3DStage Character Show
 R3DStage Character Hide
-R3DStage Character Load models/r3d-validation-character.glb
+R3DStage Character Load r3d/models/r3d-validation-character.glb
 R3DStage Character Play Idle
 R3DStage Character Play Wave
 ```
@@ -159,7 +159,7 @@ R3D Visual Stage exposes a grouped public API:
 ```js
 window.R3DVisualStage.character.show();
 window.R3DVisualStage.character.hide();
-await window.R3DVisualStage.character.load('models/r3d-validation-character.glb');
+await window.R3DVisualStage.character.load('r3d/models/r3d-validation-character.glb');
 window.R3DVisualStage.character.play('Wave');
 ```
 
@@ -182,9 +182,9 @@ milestones:
 ```text
 File logger installed.
 Character display shown.
-Loading character: models/r3d-validation-character.glb
+Loading character: r3d/models/r3d-validation-character.glb
 Plugin installed.
-Loaded character: models/r3d-validation-character.glb
+Loaded character: r3d/models/r3d-validation-character.glb
 Character display layout ready.
 Character display first render completed.
 ```
