@@ -1,4 +1,4 @@
-import type { CharacterDisplayConfig } from './config';
+import type { VisualStageLayoutConfig } from './config';
 
 export interface DomLayerViewport {
   width: number;
@@ -15,14 +15,18 @@ export interface DomLayerDiagnostics {
 
 export class DomLayer {
   private readonly canvas: HTMLCanvasElement;
-  private readonly config: CharacterDisplayConfig;
+  private readonly config: VisualStageLayoutConfig;
   private viewport: DomLayerViewport = { width: 1, height: 1 };
   private visible = false;
 
-  public constructor(canvas: HTMLCanvasElement, config: CharacterDisplayConfig) {
+  public constructor(
+    canvas: HTMLCanvasElement,
+    config: VisualStageLayoutConfig,
+    canvasId = 'R3DVisualStageCanvas',
+  ) {
     this.canvas = canvas;
     this.config = config;
-    this.canvas.id = 'R3DCharacterDisplayCanvas';
+    this.canvas.id = canvasId;
     this.applyBaseStyles();
     this.canvas.style.display = 'none';
   }
@@ -47,7 +51,7 @@ export class DomLayer {
 
     const bounds = gameCanvas.getBoundingClientRect();
     const scaleX = bounds.width / Math.max(window.Graphics?.width ?? bounds.width, 1);
-    const displayCssWidth = Math.min(this.config.characterDisplayWidth * scaleX, bounds.width);
+    const displayCssWidth = Math.min(this.config.stageWidth * scaleX, bounds.width);
 
     this.canvas.style.top = `${bounds.top + window.scrollY}px`;
     this.canvas.style.left = `${bounds.right + window.scrollX - displayCssWidth}px`;

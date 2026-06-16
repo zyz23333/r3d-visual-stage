@@ -34,7 +34,7 @@ export class CharacterDisplay {
     this.renderer.setClearColor(0x000000, 0);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, this.config.maxPixelRatio));
 
-    this.domLayer = new DomLayer(this.renderer.domElement, config);
+    this.domLayer = new DomLayer(this.renderer.domElement, config, 'R3DCharacterDisplayCanvas');
     this.camera.position.set(0, 1.35, 4.5);
     this.camera.lookAt(0, 1.1, 0);
     this.installLights();

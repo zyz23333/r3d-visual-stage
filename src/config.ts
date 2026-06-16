@@ -1,9 +1,17 @@
-export interface CharacterDisplayConfig {
+export interface VisualStageLayoutConfig {
+  stagePlacement: 'right';
+  stageWidth: number;
+}
+
+export interface VisualStageRuntimeConfig extends VisualStageLayoutConfig {
+  targetFps: number;
+  maxPixelRatio: number;
+}
+
+export interface CharacterDisplayConfig extends VisualStageRuntimeConfig {
   defaultCharacterPath: string;
   autoShowCharacter: boolean;
   characterDisplayWidth: number;
-  targetFps: number;
-  maxPixelRatio: number;
   fileLogging: boolean;
   logFilePath: string;
   timestampLogFile: boolean;
@@ -13,6 +21,8 @@ const DEFAULT_CONFIG: CharacterDisplayConfig = {
   defaultCharacterPath: 'r3d/models/r3d-validation-character.glb',
   autoShowCharacter: true,
   characterDisplayWidth: 280,
+  stagePlacement: 'right',
+  stageWidth: 280,
   targetFps: 30,
   maxPixelRatio: 1.5,
   fileLogging: false,
@@ -31,6 +41,11 @@ export function readCharacterDisplayConfig(
     characterDisplayWidth:
       readNumber(parameters['Character Display Width'], 160, 1024) ??
       DEFAULT_CONFIG.characterDisplayWidth,
+    stagePlacement: 'right',
+    stageWidth:
+      readNumber(parameters['Stage Width'], 160, 1024) ??
+      readNumber(parameters['Character Display Width'], 160, 1024) ??
+      DEFAULT_CONFIG.stageWidth,
     targetFps: readNumber(parameters['Target FPS'], 1, 60) ?? DEFAULT_CONFIG.targetFps,
     maxPixelRatio:
       readNumber(parameters['Max Pixel Ratio'], 0.5, 4) ?? DEFAULT_CONFIG.maxPixelRatio,
