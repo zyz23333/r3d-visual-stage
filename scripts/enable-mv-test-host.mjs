@@ -6,15 +6,17 @@ const PLUGIN_NAME = 'R3DVisualStage';
 const pluginSource = resolve('dist/R3DVisualStage.js');
 const sourceMapSource = resolve('dist/R3DVisualStage.js.map');
 const modelSource = resolve('public/r3d/models/r3d-validation-character.glb');
+const sceneSource = resolve('public/r3d/scenes/r3d-validation-scene.r3dscene.json');
 
 const pluginEntry = {
   name: PLUGIN_NAME,
   status: true,
-  description: 'R3D Visual Stage character display for RPG Maker MV.',
+  description: 'R3D Visual Stage presentation scene runtime for RPG Maker MV.',
   parameters: {
-    'Default Character Path': 'r3d/models/r3d-validation-character.glb',
-    'Auto Show Character': 'true',
-    'Character Display Width': '280',
+    'Default Scene Path': 'r3d/scenes/r3d-validation-scene.r3dscene.json',
+    'Auto Show Scene': 'true',
+    'Stage Placement': 'right',
+    'Stage Width': '280',
     'Target FPS': '30',
     'Max Pixel Ratio': '1.5',
     'File Logging': 'true',
@@ -50,12 +52,15 @@ async function assertMvProject(mvProjectPath) {
 async function copyVisualStageFiles(mvProjectPath) {
   const pluginTargetDir = resolve(mvProjectPath, 'js/plugins');
   const modelTargetDir = resolve(mvProjectPath, 'r3d/models');
+  const sceneTargetDir = resolve(mvProjectPath, 'r3d/scenes');
 
   await mkdir(pluginTargetDir, { recursive: true });
   await mkdir(modelTargetDir, { recursive: true });
+  await mkdir(sceneTargetDir, { recursive: true });
   await copyFile(pluginSource, resolve(pluginTargetDir, `${PLUGIN_NAME}.js`));
   await copyOptional(sourceMapSource, resolve(pluginTargetDir, `${PLUGIN_NAME}.js.map`));
   await copyFile(modelSource, resolve(modelTargetDir, 'r3d-validation-character.glb'));
+  await copyFile(sceneSource, resolve(sceneTargetDir, 'r3d-validation-scene.r3dscene.json'));
 }
 
 async function enablePlugin(mvProjectPath) {
@@ -68,10 +73,7 @@ async function enablePlugin(mvProjectPath) {
     plugins[existingIndex] = {
       ...plugins[existingIndex],
       ...pluginEntry,
-      parameters: {
-        ...pluginEntry.parameters,
-        ...plugins[existingIndex].parameters,
-      },
+      parameters: pluginEntry.parameters,
       status: true,
     };
   } else {

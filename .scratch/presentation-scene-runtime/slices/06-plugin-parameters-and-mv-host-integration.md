@@ -2,7 +2,7 @@
 
 ## Status
 
-Ready
+Done
 
 ## Type
 
@@ -76,16 +76,16 @@ and `enable:mv-test-host` writes the new parameters to `js/plugins.js`.
 
 ## Acceptance Criteria
 
-- [ ] Config type and parser use scene-oriented names.
-- [ ] Old character parameter names are not preserved as compatibility aliases.
-- [ ] Plugin header documents scene-oriented parameters and Scene commands only.
-- [ ] `Default Scene Path` default is `r3d/scenes/r3d-validation-scene.r3dscene.json`.
-- [ ] `Stage Placement` accepts only `right` or falls back to `right` with diagnostics.
-- [ ] Copy script installs the generated scene JSON into `<MV project>/r3d/scenes/`.
-- [ ] Copy script installs the generated validation model into `<MV project>/r3d/models/`.
-- [ ] Enable script writes scene-oriented plugin parameters and copies the scene JSON and validation model.
-- [ ] Script error messages reference the current scene-centered documentation path when available.
-- [ ] `package.json` formatting command includes current docs and source/script paths.
+- [x] Config type and parser use scene-oriented names.
+- [x] Old character parameter names are not preserved as compatibility aliases.
+- [x] Plugin header documents scene-oriented parameters and Scene commands only.
+- [x] `Default Scene Path` default is `r3d/scenes/r3d-validation-scene.r3dscene.json`.
+- [x] `Stage Placement` accepts only `right` or falls back to `right` with diagnostics.
+- [x] Copy script installs the generated scene JSON into `<MV project>/r3d/scenes/`.
+- [x] Copy script installs the generated validation model into `<MV project>/r3d/models/`.
+- [x] Enable script writes scene-oriented plugin parameters and copies the scene JSON and validation model.
+- [x] Script error messages reference the current scene-centered documentation path when available.
+- [x] `package.json` formatting command includes current docs and source/script paths.
 
 ## Implementation Notes
 
@@ -108,9 +108,20 @@ npm run lint
 npm run build
 ```
 
+## Verification Result
+
+Passed:
+
+- `npm run format`
+- `npm run generate:validation-asset`
+- `npm run test`
+- `npm run check`
+- `npm run lint`
+- `npm run build`
+
 ## Done When
 
-- [ ] Acceptance criteria pass.
-- [ ] Verification commands pass or skipped reason is documented.
-- [ ] Design references remain satisfied.
-- [ ] No unrelated scope was added.
+- [x] Acceptance criteria pass.
+- [x] Verification commands pass or skipped reason is documented.
+- [x] Design references remain satisfied.
+- [x] No unrelated scope was added.

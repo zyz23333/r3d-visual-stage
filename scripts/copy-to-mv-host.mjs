@@ -5,13 +5,14 @@ const configPath = resolve('.r3d-local.json');
 const pluginSource = resolve('dist/R3DVisualStage.js');
 const sourceMapSource = resolve('dist/R3DVisualStage.js.map');
 const modelSource = resolve('public/r3d/models/r3d-validation-character.glb');
+const sceneSource = resolve('public/r3d/scenes/r3d-validation-scene.r3dscene.json');
 
 let config;
 try {
   config = JSON.parse(await readFile(configPath, 'utf8'));
 } catch (error) {
   console.error(
-    'Missing .r3d-local.json. Create it from docs/r3d-character-display.md before running copy:mv.',
+    'Missing .r3d-local.json. See docs/r3d-presentation-scenes.md before running copy:mv.',
   );
   throw error;
 }
@@ -23,14 +24,17 @@ if (!config.mvProjectPath || typeof config.mvProjectPath !== 'string') {
 const mvProjectPath = resolve(config.mvProjectPath);
 const pluginTargetDir = resolve(mvProjectPath, 'js/plugins');
 const modelTargetDir = resolve(mvProjectPath, 'r3d/models');
+const sceneTargetDir = resolve(mvProjectPath, 'r3d/scenes');
 
 await mkdir(pluginTargetDir, { recursive: true });
 await mkdir(modelTargetDir, { recursive: true });
+await mkdir(sceneTargetDir, { recursive: true });
 await copyFile(pluginSource, resolve(pluginTargetDir, 'R3DVisualStage.js'));
 await copyOptional(sourceMapSource, resolve(pluginTargetDir, 'R3DVisualStage.js.map'));
 await copyFile(modelSource, resolve(modelTargetDir, 'r3d-validation-character.glb'));
+await copyFile(sceneSource, resolve(sceneTargetDir, 'r3d-validation-scene.r3dscene.json'));
 
-console.log(`Copied R3D Visual Stage plugin and validation character into ${mvProjectPath}`);
+console.log(`Copied R3D Visual Stage plugin and validation scene assets into ${mvProjectPath}`);
 
 async function copyOptional(source, target) {
   try {

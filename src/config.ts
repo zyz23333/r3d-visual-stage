@@ -1,3 +1,5 @@
+import { logWarning } from './diagnostics';
+
 export interface VisualStageLayoutConfig {
   stagePlacement: 'right';
   stageWidth: number;
@@ -8,15 +10,6 @@ export interface VisualStageRuntimeConfig extends VisualStageLayoutConfig {
   maxPixelRatio: number;
 }
 
-export interface CharacterDisplayConfig extends VisualStageRuntimeConfig {
-  defaultCharacterPath: string;
-  autoShowCharacter: boolean;
-  characterDisplayWidth: number;
-  fileLogging: boolean;
-  logFilePath: string;
-  timestampLogFile: boolean;
-}
-
 export interface VisualStagePluginConfig extends VisualStageRuntimeConfig {
   defaultScenePath: string;
   autoShowScene: boolean;
@@ -24,19 +17,6 @@ export interface VisualStagePluginConfig extends VisualStageRuntimeConfig {
   logFilePath: string;
   timestampLogFile: boolean;
 }
-
-const DEFAULT_CONFIG: CharacterDisplayConfig = {
-  defaultCharacterPath: 'r3d/models/r3d-validation-character.glb',
-  autoShowCharacter: true,
-  characterDisplayWidth: 280,
-  stagePlacement: 'right',
-  stageWidth: 280,
-  targetFps: 30,
-  maxPixelRatio: 1.5,
-  fileLogging: false,
-  logFilePath: 'r3d-logs/R3DVisualStage.log',
-  timestampLogFile: false,
-};
 
 const DEFAULT_VISUAL_STAGE_CONFIG: VisualStagePluginConfig = {
   defaultScenePath: 'r3d/scenes/r3d-validation-scene.r3dscene.json',
@@ -50,32 +30,6 @@ const DEFAULT_VISUAL_STAGE_CONFIG: VisualStagePluginConfig = {
   timestampLogFile: false,
 };
 
-export function readCharacterDisplayConfig(
-  parameters: Record<string, string | undefined>,
-): CharacterDisplayConfig {
-  return {
-    defaultCharacterPath:
-      readString(parameters['Default Character Path']) ?? DEFAULT_CONFIG.defaultCharacterPath,
-    autoShowCharacter:
-      readBoolean(parameters['Auto Show Character']) ?? DEFAULT_CONFIG.autoShowCharacter,
-    characterDisplayWidth:
-      readNumber(parameters['Character Display Width'], 160, 1024) ??
-      DEFAULT_CONFIG.characterDisplayWidth,
-    stagePlacement: 'right',
-    stageWidth:
-      readNumber(parameters['Stage Width'], 160, 1024) ??
-      readNumber(parameters['Character Display Width'], 160, 1024) ??
-      DEFAULT_CONFIG.stageWidth,
-    targetFps: readNumber(parameters['Target FPS'], 1, 60) ?? DEFAULT_CONFIG.targetFps,
-    maxPixelRatio:
-      readNumber(parameters['Max Pixel Ratio'], 0.5, 4) ?? DEFAULT_CONFIG.maxPixelRatio,
-    fileLogging: readBoolean(parameters['File Logging']) ?? DEFAULT_CONFIG.fileLogging,
-    logFilePath: readString(parameters['Log File Path']) ?? DEFAULT_CONFIG.logFilePath,
-    timestampLogFile:
-      readBoolean(parameters['Timestamp Log File']) ?? DEFAULT_CONFIG.timestampLogFile,
-  };
-}
-
 export function readVisualStageConfig(
   parameters: Record<string, string | undefined>,
 ): VisualStagePluginConfig {
@@ -84,7 +38,7 @@ export function readVisualStageConfig(
       readString(parameters['Default Scene Path']) ?? DEFAULT_VISUAL_STAGE_CONFIG.defaultScenePath,
     autoShowScene:
       readBoolean(parameters['Auto Show Scene']) ?? DEFAULT_VISUAL_STAGE_CONFIG.autoShowScene,
-    stagePlacement: 'right',
+    stagePlacement: readStagePlacement(parameters['Stage Placement']),
     stageWidth:
       readNumber(parameters['Stage Width'], 160, 1024) ?? DEFAULT_VISUAL_STAGE_CONFIG.stageWidth,
     targetFps: readNumber(parameters['Target FPS'], 1, 60) ?? DEFAULT_VISUAL_STAGE_CONFIG.targetFps,
@@ -109,6 +63,15 @@ function readBoolean(value: string | undefined): boolean | undefined {
   }
 
   return value.toLowerCase() === 'true';
+}
+
+function readStagePlacement(value: string | undefined): 'right' {
+  const placement = readString(value);
+  if (placement !== undefined && placement !== 'right') {
+    logWarning(`Unsupported Stage Placement "${placement}" ignored; falling back to "right".`);
+  }
+
+  return 'right';
 }
 
 function readNumber(value: string | undefined, min: number, max: number): number | undefined {

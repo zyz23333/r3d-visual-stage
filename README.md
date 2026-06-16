@@ -77,14 +77,15 @@ These decisions remain unresolved and should be validated through design explora
 
 ## Current Implementation
 
-This repository now includes the first implementation slice for the **3D Character Display** direction:
+This repository now includes an implementation slice for the **Presentation Scene** direction:
 
 - TypeScript source for a RPG Maker MV plugin.
 - Vite library build output targeting a normal MV plugin JavaScript file.
 - Three.js and `GLTFLoader` bundled into `R3DVisualStage.js`.
-- A transparent right-side character display canvas that follows the MV game canvas and does not block pointer input.
-- MV plugin commands for `R3DStage Character Show`, `Hide`, `Load`, and `Play`.
-- A local validation GLB generator for a lightweight `Idle`/`Wave` character.
-- A local-only copy flow for installing the built plugin and model into an external RPG Maker MV test host.
+- A transparent right-side Visual Stage canvas that follows the MV game canvas and does not block pointer input.
+- Scene-oriented public API at `window.R3DVisualStage.scene`.
+- MV plugin commands for `R3DStage Scene Load`, `Show`, `Hide`, `Camera`, and `Play`.
+- A local validation asset generator for a lightweight `Idle`/`Wave` character and a default `.r3dscene.json` file.
+- A local-only copy flow for installing the built plugin, validation model, and validation scene into an external RPG Maker MV test host.
 
-See `docs/r3d-character-display.md` for setup, build, copy, and manual verification steps.
+See `docs/r3d-presentation-scenes.md` for setup, build, copy, and manual verification steps.

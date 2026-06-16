@@ -1,36 +1,44 @@
 /*:
- * @plugindesc R3D Visual Stage character display for RPG Maker MV.
+ * @plugindesc R3D Visual Stage presentation scene runtime for RPG Maker MV.
  * @author R3D Visual Stage
  *
- * @param Default Character Path
+ * @param Default Scene Path
  * @type string
- * @default r3d/models/r3d-validation-character.glb
- * @desc GLB/glTF asset path relative to the RPG Maker MV project root.
+ * @default r3d/scenes/r3d-validation-scene.r3dscene.json
+ * @desc R3D Scene File path relative to the RPG Maker MV project root.
  *
- * @param Auto Show Character
+ * @param Auto Show Scene
  * @type boolean
  * @default true
- * @desc Show the character display after the plugin initializes.
+ * @desc Load and show the default Presentation Scene after the plugin initializes.
  *
- * @param Character Display Width
+ * @param Stage Placement
+ * @type select
+ * @option right
+ * @default right
+ * @desc Visual Stage placement. This version supports right-side placement only.
+ *
+ * @param Stage Width
  * @type number
  * @min 160
+ * @max 1024
  * @default 280
- * @desc Right-side character display width in MV canvas pixels before browser scaling.
+ * @desc Right-side Visual Stage width in MV canvas pixels before browser scaling.
  *
  * @param Target FPS
  * @type number
  * @min 1
  * @max 60
  * @default 30
- * @desc Maximum Three.js render rate for the character display.
+ * @desc Maximum Three.js render rate for the Visual Stage.
  *
  * @param Max Pixel Ratio
  * @type number
  * @decimals 2
  * @min 0.5
+ * @max 4
  * @default 1.5
- * @desc Pixel ratio cap used by the transparent character display renderer.
+ * @desc Pixel ratio cap used by the transparent Visual Stage renderer.
  *
  * @param File Logging
  * @type boolean
@@ -50,22 +58,27 @@
  * @help
  * R3D Visual Stage
  *
- * This plugin renders a transparent, right-side Three.js character display
- * while RPG Maker MV's 2D
- * tilemap remains authoritative for movement, events, collision, menus, and
- * game state.
+ * This plugin renders transparent, right-side Three.js Presentation Scenes
+ * while RPG Maker MV's 2D tilemap remains authoritative for movement, events,
+ * collision, menus, and game state.
+ *
+ * R3D Scene Files are strict JSON files with the .r3dscene.json extension.
+ * Paths are relative to the RPG Maker MV project root. The default validation
+ * scene is:
+ *
+ *   r3d/scenes/r3d-validation-scene.r3dscene.json
  *
  * Plugin commands:
  *
- *   R3DStage Character Show
- *   R3DStage Character Hide
- *   R3DStage Character Load r3d/models/r3d-validation-character.glb
- *   R3DStage Character Play Idle
- *   R3DStage Character Play Wave
+ *   R3DStage Scene Load r3d/scenes/r3d-validation-scene.r3dscene.json
+ *   R3DStage Scene Show
+ *   R3DStage Scene Hide
+ *   R3DStage Scene Camera portrait
+ *   R3DStage Scene Play character Wave
  *
- * The plugin also listens for the MV "ok" input and attempts to play Wave
- * when that clip exists in the loaded GLB. Missing clips and failed model loads
- * are reported to the browser console without stopping the MV game loop.
+ * Successful scene loads automatically show the Visual Stage. Failed loads,
+ * missing cameras, missing models, and missing animation clips are reported to
+ * the browser console without stopping the MV game loop.
  *
  * During RPG Maker MV playtest, set File Logging to true to write diagnostics
  * under the MV project root. Enable Timestamp Log File to keep one separate log
