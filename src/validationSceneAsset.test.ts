@@ -21,7 +21,10 @@ describe('generated validation scene asset', () => {
     expect(result.definition.schemaVersion).toBe(1);
     expect(result.definition.id).toBe('r3d-validation-scene');
     expect(result.definition.activeCamera).toBe('portrait');
-    expect(result.definition.cameras).toEqual([expect.objectContaining({ id: 'portrait' })]);
+    expect(result.definition.cameras).toEqual([
+      expect.objectContaining({ id: 'portrait' }),
+      expect.objectContaining({ id: 'wide' }),
+    ]);
     expect(result.definition.lights).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ id: 'hemi', type: 'hemisphere' }),

@@ -21,6 +21,14 @@ const validationSceneDefinition = {
       near: 0.1,
       far: 100,
     },
+    {
+      id: 'wide',
+      position: [0, 1.25, 7.0],
+      target: [0, 1.05, 0],
+      fov: 46,
+      near: 0.1,
+      far: 100,
+    },
   ],
   activeCamera: 'portrait',
   lights: [

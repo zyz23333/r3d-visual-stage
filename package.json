@@ -14,6 +14,7 @@
     "generate:validation-asset": "node scripts/generate-validation-asset.mjs",
     "copy:mv": "node scripts/copy-to-mv-host.mjs",
     "enable:mv-test-host": "npm run generate:validation-asset && npm run build && node scripts/enable-mv-test-host.mjs",
+    "enable:mv-manual-test": "npm run enable:mv-test-host && node scripts/install-mv-manual-test.mjs",
     "serve:mv": "node scripts/serve-mv-project.mjs"
   },
   "dependencies": {

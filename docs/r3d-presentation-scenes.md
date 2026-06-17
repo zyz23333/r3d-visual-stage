@@ -81,6 +81,43 @@ inserts or updates the `R3DVisualStage` entry in `<MV project>/js/plugins.js`
 with `status: true`. The command intentionally requires `.r3d-local.json`; it
 does not fall back to any repository-local reference project.
 
+## Install The MV Manual Test Checklist
+
+For step-by-step RPG Maker MV playtest verification, install the local manual
+test plugin:
+
+```sh
+npm run enable:mv-manual-test
+```
+
+This command first runs `enable:mv-test-host`, then writes and enables a
+local-only `R3DVisualStageManualTest` plugin in the configured MV project. It
+also writes an intentionally invalid scene file at:
+
+```text
+<MV project>/r3d/scenes/r3d-invalid-scene.r3dscene.json
+```
+
+Open RPG Maker MV playtest after running the command. A small checklist panel
+appears in the top-left corner. Use the buttons or keyboard shortcuts to run one
+step at a time:
+
+- `N`: run the current step.
+- `P`: mark the current step passed.
+- `F`: mark the current step failed.
+- `R`: rerun the current step.
+- `[` / `]`: move to the previous or next step.
+- `H`: hide or show the checklist panel.
+
+The checklist executes the same public command path that ordinary MV events use
+for scene playback, visibility, camera switching, and scene loading. Some checks
+still require visual judgment, such as confirming the validation character is
+visible, pointer input reaches the MV map, the invalid scene load preserves the
+current scene, and resize alignment remains correct.
+
+Remove or disable `R3DVisualStageManualTest` from the MV Plugin Manager when the
+local playtest checklist is no longer needed.
+
 ## Serve The Local MV Test Host
 
 The configured `.r3d-local.json` project can be served over HTTP with:
@@ -160,6 +197,14 @@ The generated validation scene uses this shape:
       "fov": 30,
       "near": 0.1,
       "far": 100
+    },
+    {
+      "id": "wide",
+      "position": [0, 1.25, 7.0],
+      "target": [0, 1.05, 0],
+      "fov": 46,
+      "near": 0.1,
+      "far": 100
     }
   ],
   "activeCamera": "portrait",
@@ -197,6 +242,7 @@ RPG Maker MV plugin commands:
 R3DStage Scene Load r3d/scenes/r3d-validation-scene.r3dscene.json
 R3DStage Scene Show
 R3DStage Scene Hide
+R3DStage Scene Camera wide
 R3DStage Scene Camera portrait
 R3DStage Scene Play character Wave
 ```
@@ -204,7 +250,8 @@ R3DStage Scene Play character Wave
 Successful scene loads automatically show the Visual Stage. `Hide` hides the
 canvas without disposing the active scene. `Show` reveals the current active
 scene. `Camera` switches to a named Presentation Camera. `Play` requires both a
-model ID and an exact animation clip name.
+model ID and an exact animation clip name. The validation scene includes both a
+`wide` and `portrait` camera so you can verify visible camera switching.
 
 ## Public JavaScript API
 
@@ -215,6 +262,7 @@ await window.R3DVisualStage.scene.load('r3d/scenes/r3d-validation-scene.r3dscene
 await window.R3DVisualStage.scene.loadDefinition(sceneDefinition);
 window.R3DVisualStage.scene.show();
 window.R3DVisualStage.scene.hide();
+window.R3DVisualStage.scene.setCamera('wide');
 window.R3DVisualStage.scene.setCamera('portrait');
 window.R3DVisualStage.scene.play('character', 'Wave');
 window.R3DVisualStage.dispose();
@@ -229,8 +277,12 @@ In RPG Maker MV playtest or Web deployment served over HTTP:
 3. Confirm normal MV keyboard and pointer input still reaches the 2D map.
 4. Trigger `R3DStage Scene Hide`, then `R3DStage Scene Show`.
 5. Trigger `R3DStage Scene Play character Wave`.
-6. Trigger `R3DStage Scene Camera portrait`.
-7. Resize the browser or playtest window and confirm the Visual Stage remains aligned with the MV game canvas.
+6. Trigger `R3DStage Scene Camera wide`.
+7. Trigger `R3DStage Scene Camera portrait`.
+8. Resize the browser or playtest window and confirm the Visual Stage remains aligned with the MV game canvas.
+
+When `R3DVisualStageManualTest` is enabled, use its checklist panel to run these
+checks one at a time and record pass/fail status during playtest.
 
 For RPG Maker MV playtest, also inspect the latest log file under
 `<MV project>/r3d-logs/`. A successful default startup should include scene load,

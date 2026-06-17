@@ -2,7 +2,7 @@
 
 ## Status
 
-Ready
+Completed
 
 ## Type
 
@@ -29,6 +29,14 @@ External issue: none
 
 Complete the scene-centered migration by updating user-facing documentation and verifying the full path from generated **R3D Scene File** through MV plugin commands and runtime behavior.
 
+## Result
+
+- Primary docs now describe **R3D Scene Files**, **Presentation Scene Definitions**, the scene-oriented API, and the generated validation scene.
+- The default validation scene now includes both `portrait` and `wide` cameras so manual camera switching is visible.
+- A local `R3DVisualStageManualTest` MV checklist plugin now provides step-by-step verification for `Play`, `Hide`, `Show`, `Camera wide`, `Camera portrait`, invalid load preservation, pointer pass-through, resize alignment, and file logging.
+- The repo verification commands all pass.
+- Local MV playtest verification was documented and made repeatable, but the actual Playtest session was not executed in this workspace.
+
 ## Scope
 
 ### In
@@ -36,6 +44,7 @@ Complete the scene-centered migration by updating user-facing documentation and 
 - Replace or supersede `docs/r3d-character-display.md` with scene-centered documentation.
 - Update README current implementation notes if they conflict with scene runtime behavior.
 - Document **R3D Scene File** schema v1, default validation scene, plugin parameters, Scene commands, public Scene API, manual verification, diagnostics, and known limits.
+- Add a repeatable local MV manual checklist for step-by-step Playtest verification.
 - Run final type, lint, build, test, and generation checks.
 - Document any MV playtest verification that cannot be run locally.
 
@@ -74,16 +83,17 @@ Manual verification steps must include:
 
 ## Acceptance Criteria
 
-- [ ] Primary docs describe **R3D Scene Files** and **Presentation Scene Definitions**.
-- [ ] Primary docs document schema v1 fields implemented by the runtime, including `cameras`, `activeCamera`, `lights`, `models`, transforms, `fit`, strict JSON, and project-root-relative paths.
-- [ ] Primary docs document `R3DStage Scene Load`, `Show`, `Hide`, `Camera`, and `Play`.
-- [ ] Primary docs document `window.R3DVisualStage.scene.load`, `loadDefinition`, `show`, `hide`, `setCamera`, and `play`.
-- [ ] Primary docs document `window.R3DVisualStage.dispose()`.
-- [ ] Docs do not advertise `R3DStage Character ...` or `window.R3DVisualStage.character`.
-- [ ] Docs explain that the validation character is a default **Presentation Scene** example.
-- [ ] Known limits match the design's non-goals and deferred ideas.
-- [ ] README current implementation notes are not stale.
-- [ ] Final verification commands pass or skipped manual MV playtest steps are explicitly documented.
+- [x] Primary docs describe **R3D Scene Files** and **Presentation Scene Definitions**.
+- [x] Primary docs document schema v1 fields implemented by the runtime, including `cameras`, `activeCamera`, `lights`, `models`, transforms, `fit`, strict JSON, and project-root-relative paths.
+- [x] Primary docs document `R3DStage Scene Load`, `Show`, `Hide`, `Camera`, and `Play`.
+- [x] Primary docs document `window.R3DVisualStage.scene.load`, `loadDefinition`, `show`, `hide`, `setCamera`, and `play`.
+- [x] Primary docs document `window.R3DVisualStage.dispose()`.
+- [x] Docs do not advertise `R3DStage Character ...` or `window.R3DVisualStage.character`.
+- [x] Docs explain that the validation character is a default **Presentation Scene** example.
+- [x] Primary docs and validation assets describe both `portrait` and `wide` cameras so camera switching is visibly testable.
+- [x] Known limits match the design's non-goals and deferred ideas.
+- [x] README current implementation notes are not stale.
+- [x] Final verification commands pass or skipped manual MV playtest steps are explicitly documented.
 
 ## Implementation Notes
 
@@ -109,7 +119,7 @@ npm run build
 
 ## Done When
 
-- [ ] Acceptance criteria pass.
-- [ ] Verification commands pass or skipped reason is documented.
-- [ ] Design references remain satisfied.
-- [ ] No unrelated scope was added.
+- [x] Acceptance criteria pass.
+- [x] Verification commands pass or skipped reason is documented. The MV playtest session itself was not executed locally; the repository now includes a repeatable checklist plugin for that step.
+- [x] Design references remain satisfied.
+- [x] No unrelated scope was added.
