@@ -2,7 +2,7 @@
 
 ## Status
 
-Ready
+Completed
 
 ## Type
 
@@ -23,6 +23,14 @@ External issue: none
 ## Purpose
 
 Establish the first-version **Presentation Scene Definition** contract before any runtime mutation code depends on user-authored JSON. This slice unlocks safe scene loading, validation asset generation, runtime scene construction, and later path-based loading.
+
+## Result
+
+- Added schema v1 **Presentation Scene Definition** TypeScript types.
+- Added runtime validation for unknown scene definition input.
+- Added structured validation diagnostics for errors and warnings.
+- Added validator tests covering required fields, malformed cameras, active camera references, vectors, numeric bounds, lights, models, fit, scale, and high-FOV warnings.
+- Added the project test command with Vitest.
 
 ## Scope
 
@@ -83,21 +91,21 @@ The validator must cover:
 
 ## Acceptance Criteria
 
-- [ ] Scene definition TypeScript types exist and reflect schema v1 only.
-- [ ] Runtime validation accepts the validation scene shape from the design.
-- [ ] Runtime validation rejects missing `schemaVersion`.
-- [ ] Runtime validation rejects `schemaVersion !== 1`.
-- [ ] Runtime validation rejects malformed `cameras`, duplicate camera IDs, and missing or invalid `activeCamera`.
-- [ ] Runtime validation rejects invalid vectors and non-finite numeric values.
-- [ ] Runtime validation rejects invalid camera `fov`, `near`, and `far`, and surfaces high-`fov` warnings.
-- [ ] Runtime validation accepts omitted or empty `lights` and omitted or empty `models`.
-- [ ] Runtime validation rejects unsupported light types, invalid light colors, and invalid light intensity.
-- [ ] Runtime validation rejects duplicate model IDs.
-- [ ] Runtime validation rejects empty model paths.
-- [ ] Runtime validation rejects vector scale and non-positive scale.
-- [ ] Runtime validation rejects invalid fit heights and invalid fit origins.
-- [ ] Runtime validation does not introduce layout, timeline, nested graph, script, physics, collision, Visual Choreography, or AssetManager concepts.
-- [ ] A test command exists and runs validator tests.
+- [x] Scene definition TypeScript types exist and reflect schema v1 only.
+- [x] Runtime validation accepts the validation scene shape from the design.
+- [x] Runtime validation rejects missing `schemaVersion`.
+- [x] Runtime validation rejects `schemaVersion !== 1`.
+- [x] Runtime validation rejects malformed `cameras`, duplicate camera IDs, and missing or invalid `activeCamera`.
+- [x] Runtime validation rejects invalid vectors and non-finite numeric values.
+- [x] Runtime validation rejects invalid camera `fov`, `near`, and `far`, and surfaces high-`fov` warnings.
+- [x] Runtime validation accepts omitted or empty `lights` and omitted or empty `models`.
+- [x] Runtime validation rejects unsupported light types, invalid light colors, and invalid light intensity.
+- [x] Runtime validation rejects duplicate model IDs.
+- [x] Runtime validation rejects empty model paths.
+- [x] Runtime validation rejects vector scale and non-positive scale.
+- [x] Runtime validation rejects invalid fit heights and invalid fit origins.
+- [x] Runtime validation does not introduce layout, timeline, nested graph, script, physics, collision, Visual Choreography, or AssetManager concepts.
+- [x] A test command exists and runs validator tests.
 
 ## Implementation Notes
 
@@ -121,9 +129,17 @@ npm run check
 npm run lint
 ```
 
+## Verification Result
+
+Passed:
+
+- `npm run test`
+- `npm run check`
+- `npm run lint`
+
 ## Done When
 
-- [ ] Acceptance criteria pass.
-- [ ] Verification commands pass or skipped reason is documented.
-- [ ] Design references remain satisfied.
-- [ ] No unrelated scope was added.
+- [x] Acceptance criteria pass.
+- [x] Verification commands pass or skipped reason is documented.
+- [x] Design references remain satisfied.
+- [x] No unrelated scope was added.

@@ -2,7 +2,7 @@
 
 ## Status
 
-Ready
+Completed
 
 ## Type
 
@@ -23,6 +23,17 @@ External issue: none
 ## Purpose
 
 Expose the scene-oriented runtime through the public JavaScript API and RPG Maker MV plugin commands, add path-based **R3D Scene File** loading, and explicitly remove the old `character` API and `R3DStage Character ...` command surface.
+
+## Result
+
+- Added path-based **R3D Scene File** loading through an MV-compatible `XMLHttpRequest` text loader.
+- Scene file loading uses strict `JSON.parse`, runtime validation, and handled diagnostics before delegating to the runtime.
+- Added path normalization and rejection for empty, absolute, drive-letter, URL, protocol-relative, and parent-directory traversal paths.
+- Exposed `window.R3DVisualStage.scene` with `load`, `loadDefinition`, `show`, `hide`, `setCamera`, and `play`.
+- Exposed `window.R3DVisualStage.dispose()` for terminal runtime disposal.
+- Routed `R3DStage Scene Load`, `Show`, `Hide`, `Camera`, and `Play` commands.
+- Removed the old public `character` API, old `R3DStage Character ...` command surface, and hidden MV `ok` input demo behavior.
+- Tests cover public API exposure, command routing, path loading, validation failures, and scene update integration.
 
 ## Scope
 
@@ -86,23 +97,23 @@ Path loading must normalize backslashes to forward slashes, reject unsafe paths,
 
 ## Acceptance Criteria
 
-- [ ] `window.R3DVisualStage.scene` exists with `load`, `loadDefinition`, `show`, `hide`, `setCamera`, and `play`.
-- [ ] `window.R3DVisualStage.dispose()` delegates to terminal runtime disposal.
-- [ ] `window.R3DVisualStage.character` is not exposed.
-- [ ] `R3DStage Scene Load <path>` loads a scene path.
-- [ ] `R3DStage Scene Show` shows the Visual Stage.
-- [ ] `R3DStage Scene Hide` hides the Visual Stage.
-- [ ] `R3DStage Scene Camera <cameraId>` switches the active **Presentation Camera**.
-- [ ] `R3DStage Scene Play <modelId> <clipName>` plays a model animation.
-- [ ] `R3DStage Character ...` is not routed as a supported command.
-- [ ] `load(path)` uses an MV-compatible `XMLHttpRequest` text loader, not `fetch`.
-- [ ] `load(path)` normalizes backslashes and rejects empty paths, absolute paths, drive-letter paths, `file://` URLs, remote URLs, protocol-relative URLs, and parent-directory traversal.
-- [ ] Scene file load failure, JSON parse failure, validation failure, and asset-load failure are logged distinctly.
-- [ ] Auto-load uses scene config and calls scene path loading.
-- [ ] MV `ok` input demo behavior is removed.
-- [ ] Handled load failures log errors and preserve active scene, active camera, and visibility.
-- [ ] Concurrent load calls cannot let an older pending load replace a newer successful scene.
-- [ ] Type declarations reflect the scene API and no longer expose the old character API.
+- [x] `window.R3DVisualStage.scene` exists with `load`, `loadDefinition`, `show`, `hide`, `setCamera`, and `play`.
+- [x] `window.R3DVisualStage.dispose()` delegates to terminal runtime disposal.
+- [x] `window.R3DVisualStage.character` is not exposed.
+- [x] `R3DStage Scene Load <path>` loads a scene path.
+- [x] `R3DStage Scene Show` shows the Visual Stage.
+- [x] `R3DStage Scene Hide` hides the Visual Stage.
+- [x] `R3DStage Scene Camera <cameraId>` switches the active **Presentation Camera**.
+- [x] `R3DStage Scene Play <modelId> <clipName>` plays a model animation.
+- [x] `R3DStage Character ...` is not routed as a supported command.
+- [x] `load(path)` uses an MV-compatible `XMLHttpRequest` text loader, not `fetch`.
+- [x] `load(path)` normalizes backslashes and rejects empty paths, absolute paths, drive-letter paths, `file://` URLs, remote URLs, protocol-relative URLs, and parent-directory traversal.
+- [x] Scene file load failure, JSON parse failure, validation failure, and asset-load failure are logged distinctly.
+- [x] Auto-load uses scene config and calls scene path loading.
+- [x] MV `ok` input demo behavior is removed.
+- [x] Handled load failures log errors and preserve active scene, active camera, and visibility.
+- [x] Concurrent load calls cannot let an older pending load replace a newer successful scene.
+- [x] Type declarations reflect the scene API and no longer expose the old character API.
 
 ## Implementation Notes
 
@@ -127,9 +138,18 @@ npm run lint
 npm run build
 ```
 
+## Verification Result
+
+Passed:
+
+- `npm run test`
+- `npm run check`
+- `npm run lint`
+- `npm run build`
+
 ## Done When
 
-- [ ] Acceptance criteria pass.
-- [ ] Verification commands pass or skipped reason is documented.
-- [ ] Design references remain satisfied.
-- [ ] No unrelated scope was added.
+- [x] Acceptance criteria pass.
+- [x] Verification commands pass or skipped reason is documented.
+- [x] Design references remain satisfied.
+- [x] No unrelated scope was added.

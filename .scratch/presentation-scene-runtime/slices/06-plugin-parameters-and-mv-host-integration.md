@@ -2,7 +2,7 @@
 
 ## Status
 
-Done
+Completed
 
 ## Type
 

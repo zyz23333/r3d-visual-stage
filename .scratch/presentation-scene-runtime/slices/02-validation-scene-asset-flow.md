@@ -2,7 +2,7 @@
 
 ## Status
 
-Ready
+Completed
 
 ## Type
 
@@ -23,6 +23,14 @@ External issue: none
 ## Purpose
 
 Make the default validation path exercise **R3D Scene File** loading instead of only GLB loading. This slice gives later runtime, public API, and MV host slices a real generated `.r3dscene.json` file to load.
+
+## Result
+
+- Updated the validation asset generation flow to produce both the validation GLB and validation **R3D Scene File**.
+- The generated scene lives at `public/r3d/scenes/r3d-validation-scene.r3dscene.json`.
+- The generated model lives at `public/r3d/models/r3d-validation-character.glb`.
+- The generated scene references the validation model with the MV project-root-relative path `r3d/models/r3d-validation-character.glb`.
+- The generated scene validates against the schema v1 runtime validator and includes cameras, lights, model fit, and the initial `Idle` animation.
 
 ## Scope
 
@@ -75,15 +83,15 @@ The generated scene should include:
 
 ## Acceptance Criteria
 
-- [ ] `npm run generate:validation-asset` produces the validation GLB and validation **R3D Scene File**.
-- [ ] Generated scene file path is `public/r3d/scenes/r3d-validation-scene.r3dscene.json`.
-- [ ] Generated scene JSON is stable, readable, strict JSON.
-- [ ] Generated scene passes the Slice 01 validator.
-- [ ] Generated scene uses `cameras[] + activeCamera`.
-- [ ] Generated scene declares lights explicitly.
-- [ ] Generated scene references `r3d/models/r3d-validation-character.glb`.
-- [ ] Generated scene uses model ID `character` and initial animation `Idle`.
-- [ ] Existing GLB generation behavior remains intact.
+- [x] `npm run generate:validation-asset` produces the validation GLB and validation **R3D Scene File**.
+- [x] Generated scene file path is `public/r3d/scenes/r3d-validation-scene.r3dscene.json`.
+- [x] Generated scene JSON is stable, readable, strict JSON.
+- [x] Generated scene passes the Slice 01 validator.
+- [x] Generated scene uses `cameras[] + activeCamera`.
+- [x] Generated scene declares lights explicitly.
+- [x] Generated scene references `r3d/models/r3d-validation-character.glb`.
+- [x] Generated scene uses model ID `character` and initial animation `Idle`.
+- [x] Existing GLB generation behavior remains intact.
 
 ## Implementation Notes
 
@@ -108,9 +116,18 @@ npm run check
 npm run lint
 ```
 
+## Verification Result
+
+Passed:
+
+- `npm run generate:validation-asset`
+- `npm run test`
+- `npm run check`
+- `npm run lint`
+
 ## Done When
 
-- [ ] Acceptance criteria pass.
-- [ ] Verification commands pass or skipped reason is documented.
-- [ ] Design references remain satisfied.
-- [ ] No unrelated scope was added.
+- [x] Acceptance criteria pass.
+- [x] Verification commands pass or skipped reason is documented.
+- [x] Design references remain satisfied.
+- [x] No unrelated scope was added.

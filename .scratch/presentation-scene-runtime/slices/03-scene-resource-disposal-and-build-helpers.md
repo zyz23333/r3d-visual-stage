@@ -2,7 +2,7 @@
 
 ## Status
 
-Ready
+Completed
 
 ## Type
 
@@ -23,6 +23,15 @@ External issue: none
 ## Purpose
 
 Extract and test the high-risk Three.js resource lifecycle and model build behavior before integrating the full **Visual Stage** runtime. This slice reduces risk around scene switching, disposal, model fitting, and exact animation lookup.
+
+## Result
+
+- Added reusable scene disposal helpers for owned Three.js object trees.
+- Disposal now deduplicates geometries, materials, textures, and skeletons before disposal.
+- Disposal best-effort closes ImageBitmap-backed texture data and continues after close/dispose warnings.
+- Added helpers for model fit and transform preparation using bounding-box Y height.
+- Added exact, case-sensitive animation clip lookup.
+- Added focused tests for disposal deduplication, ImageBitmap close behavior, model fit behavior, impossible fit failures, and exact clip lookup.
 
 ## Scope
 
@@ -65,18 +74,18 @@ Create reusable helpers that later runtime code can call:
 
 ## Acceptance Criteria
 
-- [ ] Disposal helper traverses an object tree and disposes unique geometries.
-- [ ] Disposal helper disposes unique materials.
-- [ ] Disposal helper discovers and disposes unique material textures.
-- [ ] Disposal helper best-effort closes `texture.source?.data?.close` and `texture.image?.close` when present.
-- [ ] Disposal helper handles skeleton disposal where present.
-- [ ] Disposal helper stops mixers and uncaches mixer roots.
-- [ ] Disposal continues after individual close/dispose warnings where practical.
-- [ ] Fit helper scales by bounding box Y size, not longest axis.
-- [ ] Fit helper supports `center` and `center-bottom`.
-- [ ] Impossible fit calculations fail clearly.
-- [ ] Clip lookup is exact case-sensitive and does not use fuzzy, substring, or case-insensitive matching.
-- [ ] Tests cover shared resource deduplication and ImageBitmap close behavior.
+- [x] Disposal helper traverses an object tree and disposes unique geometries.
+- [x] Disposal helper disposes unique materials.
+- [x] Disposal helper discovers and disposes unique material textures.
+- [x] Disposal helper best-effort closes `texture.source?.data?.close` and `texture.image?.close` when present.
+- [x] Disposal helper handles skeleton disposal where present.
+- [x] Disposal helper stops mixers and uncaches mixer roots.
+- [x] Disposal continues after individual close/dispose warnings where practical.
+- [x] Fit helper scales by bounding box Y size, not longest axis.
+- [x] Fit helper supports `center` and `center-bottom`.
+- [x] Impossible fit calculations fail clearly.
+- [x] Clip lookup is exact case-sensitive and does not use fuzzy, substring, or case-insensitive matching.
+- [x] Tests cover shared resource deduplication and ImageBitmap close behavior.
 
 ## Implementation Notes
 
@@ -100,9 +109,17 @@ npm run check
 npm run lint
 ```
 
+## Verification Result
+
+Passed:
+
+- `npm run test`
+- `npm run check`
+- `npm run lint`
+
 ## Done When
 
-- [ ] Acceptance criteria pass.
-- [ ] Verification commands pass or skipped reason is documented.
-- [ ] Design references remain satisfied.
-- [ ] No unrelated scope was added.
+- [x] Acceptance criteria pass.
+- [x] Verification commands pass or skipped reason is documented.
+- [x] Design references remain satisfied.
+- [x] No unrelated scope was added.
